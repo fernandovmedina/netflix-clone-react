@@ -6,11 +6,16 @@ const CashPaymentOption = () => {
     const email = new URLSearchParams(window.location.search).get("email");
     const password = new URLSearchParams(window.location.search).get("password");
     const plan = new URLSearchParams(window.location.search).get("plan");
+    const phoneNumberURL = new URLSearchParams(window.location.search).get("phoneNumber");
+    const clientNameURL = new URLSearchParams(window.location.search).get("clientName");
 
     useEffect(() => {
         document.getElementById("chn")!.addEventListener("click", () => {
             window.location.href = `/signup/paymentPicker?email=${email}&password=${password}&plan=${plan}`;
         });
+
+        var clientName: string | any = document.getElementById("clientName")
+        var phoneNumber: string | any = document.getElementById("phoneNumber")
 
         var chk: any = document.getElementById("chk");
         var check: any = document.getElementById("checked");
@@ -56,7 +61,7 @@ const CashPaymentOption = () => {
 
         if (change) {
             change.addEventListener("click", () => {
-                window.location.href = `/signup/editplanOXXO?email=${email}&password=${password}&plan=${plan}`;
+                window.location.href = `/signup/editplanOXXO?email=${email}&password=${password}&plan=${plan}&clientName=${clientName.value}&phoneNumber=${phoneNumber.value}`;
             });
         }
 
@@ -113,6 +118,8 @@ const CashPaymentOption = () => {
                             <input
                                 type="tel"
                                 placeholder="Phone number"
+                                id="phoneNumber"
+                                value={phoneNumberURL}
                                 className="w-full"
                                 required
                             />
@@ -120,6 +127,8 @@ const CashPaymentOption = () => {
                         <input
                             type="text"
                             placeholder="Name"
+                            id="clientName"
+                            value={clientNameURL}
                             required
                             className="border-2 border-gray-600 my-2 w-full px-2 py-3"
                         />

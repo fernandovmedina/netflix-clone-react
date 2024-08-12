@@ -1,13 +1,27 @@
 import NavbarSign from "../../components/NavbarSign";
 import FooterSign from "../../components/FooterSign";
+import { useEffect } from "react";
 
 const Registration = () => {
-    var btn: any = document.getElementById("btn");
     var email = new URLSearchParams(window.location.search).get("email");
 
-    btn.addEventListener("click", () => {
-        window.location.href = `/signup/regform?email=${email}`;
-    });
+    useEffect(() => {
+        var btn: any = document.getElementById("btn");
+
+        if (btn) {
+            btn.addEventListener("click", () => {
+                window.location.href = `/signup/regform?email=${email}`;
+            });
+        }
+
+        return () => {
+            if (btn) {
+                btn.removeEventListener("click", () => {
+                    window.location.href = `/signup/regform?email=${email}`;
+                });
+            }
+        }
+    }, []);
 
     return (
         <main>
@@ -33,8 +47,7 @@ const Registration = () => {
                         <button
                             id="btn"
                             className="bg-red-600 py-3 hover:bg-red-700 text-white w-full text-center rounded"
-                        >NEXT</button
-                        >
+                        >NEXT</button>
                     </div>
                 </div>
             </section>

@@ -1,59 +1,110 @@
+import { useEffect } from "react";
 import FooterSign from "../../components/FooterSign";
 import NavbarSign from "../../components/NavbarSign";
 
 const Planform = () => {
-    var nextBTN: any = document.getElementById("nextBTN");
     var email = new URLSearchParams(window.location.search).get("email");
     var password = new URLSearchParams(window.location.search).get("password");
-
-    nextBTN.addEventListener("click", () => {
-        window.location.href = `/signup/paymentPicker?email=${email}&password=${password}&plan=${GRGH()}`;
-    });
-
-    var div_1: any = document.getElementById("div_1");
-    var div_2: any = document.getElementById("div_2");
-    var div_3: any = document.getElementById("div_3");
-
-    var rgh_1: any = document.getElementById("rgh_1");
-    var rgh_2: any = document.getElementById("rgh_2");
-    var rgh_3: any = document.getElementById("rgh_3");
 
     var bool_1: boolean = false;
     var bool_2: boolean = false;
     var bool_3: boolean = false;
 
-    div_1.addEventListener("click", () => {
-        bool_1 = !bool_1;
-        if (bool_2 || bool_3) {
-            bool_2 = false;
-            bool_3 = false;
-            rgh_2.style.display = "none";
-            rgh_3.style.display = "none";
-        }
-        rgh_1.style.display = "block";
-    });
+    useEffect(() => {
+        var nextBTN: any = document.getElementById("nextBTN");
 
-    div_2.addEventListener("click", () => {
-        bool_2 = !bool_2;
-        if (bool_1 || bool_3) {
-            bool_1 = false;
-            bool_3 = false;
-            rgh_1.style.display = "none";
-            rgh_3.style.display = "none";
+        if (nextBTN) {
+            nextBTN.addEventListener("click", () => {
+                window.location.href = `/signup/paymentPicker?email=${email}&password=${password}&plan=${GRGH()}`;
+            });
         }
-        rgh_2.style.display = "block";
-    });
 
-    div_3.addEventListener("click", () => {
-        bool_3 = !bool_3;
-        if (bool_1 || bool_2) {
-            bool_1 = false;
-            bool_2 = false;
-            rgh_1.style.display = "none";
-            rgh_2.style.display = "none";
+        var div_1: any = document.getElementById("div_1");
+        var div_2: any = document.getElementById("div_2");
+        var div_3: any = document.getElementById("div_3");
+
+        var rgh_1: any = document.getElementById("rgh_1");
+        var rgh_2: any = document.getElementById("rgh_2");
+        var rgh_3: any = document.getElementById("rgh_3");
+
+        if (div_1 && div_2 && div_3 && rgh_1 && rgh_2 && rgh_3) {
+            div_1.addEventListener("click", () => {
+                bool_1 = !bool_1;
+                if (bool_2 || bool_3) {
+                    bool_2 = false;
+                    bool_3 = false;
+                    rgh_2.style.display = "none";
+                    rgh_3.style.display = "none";
+                }
+                rgh_1.style.display = "block";
+            });
+
+            div_2.addEventListener("click", () => {
+                bool_2 = !bool_2;
+                if (bool_1 || bool_3) {
+                    bool_1 = false;
+                    bool_3 = false;
+                    rgh_1.style.display = "none";
+                    rgh_3.style.display = "none";
+                }
+                rgh_2.style.display = "block";
+            });
+
+            div_3.addEventListener("click", () => {
+                bool_3 = !bool_3;
+                if (bool_1 || bool_2) {
+                    bool_1 = false;
+                    bool_2 = false;
+                    rgh_1.style.display = "none";
+                    rgh_2.style.display = "none";
+                }
+                rgh_3.style.display = "block";
+            });
         }
-        rgh_3.style.display = "block";
-    });
+
+        return () => {
+            if (nextBTN) {
+                nextBTN.removeEventListener("click", () => {
+                    window.location.href = `/signup/paymentPicker?email=${email}&password=${password}&plan=${GRGH()}`;
+                });
+            }
+
+            if (div_1 && div_2 && div_3 && rgh_1 && rgh_2 && rgh_3) {
+                div_1.removeEventListener("click", () => {
+                    bool_1 = !bool_1;
+                    if (bool_2 || bool_3) {
+                        bool_2 = false;
+                        bool_3 = false;
+                        rgh_2.style.display = "none";
+                        rgh_3.style.display = "none";
+                    }
+                    rgh_1.style.display = "block";
+                });
+    
+                div_2.removeEventListener("click", () => {
+                    bool_2 = !bool_2;
+                    if (bool_1 || bool_3) {
+                        bool_1 = false;
+                        bool_3 = false;
+                        rgh_1.style.display = "none";
+                        rgh_3.style.display = "none";
+                    }
+                    rgh_2.style.display = "block";
+                });
+    
+                div_3.removeEventListener("click", () => {
+                    bool_3 = !bool_3;
+                    if (bool_1 || bool_2) {
+                        bool_1 = false;
+                        bool_2 = false;
+                        rgh_1.style.display = "none";
+                        rgh_2.style.display = "none";
+                    }
+                    rgh_3.style.display = "block";
+                });
+            }
+        }
+    }, []);
 
     function GRGH() {
         if (bool_1) {
@@ -260,8 +311,7 @@ const Planform = () => {
                     <a
                         className="text-blue-600 hover:underline hover:underline-offset-1"
                         href="https://help.netflix.com/node/126831"
-                    >More info about the plan with ads.</a
-                    > If you select a plan with ads, you will be asked to provide your date
+                    >More info about the plan with ads.</a> If you select a plan with ads, you will be asked to provide your date
                     of birth for ad personalization and for other purposes consistent with
                     the Netflix <a
                         href="https://help.netflix.com/legal/privacy"
@@ -274,15 +324,13 @@ const Planform = () => {
                     content is available in all resolutions. See <a
                         href="https://help.netflix.com/legal/termsofuse"
                         className="text-blue-600 hover:underline hover:underline-offset-1"
-                    >Terms of Use</a
-                    > for more information.
+                    >Terms of Use</a> for more information.
                 </p>
                 <p>
                     Only people who live with you can use your account. Add 1 extra
                     member with the Standard plan or up to 2 with the Premium plan. <a
                         className="text-blue-600 hover:underline hover:underline-offset-1"
-                        href="https://help.netflix.com/pricing">More info.</a
-                    > You can watch Netflix on 4 devices at the same time with the Premium
+                        href="https://help.netflix.com/pricing">More info.</a> You can watch Netflix on 4 devices at the same time with the Premium
                     plan and on 2 with the Standard or Standard plan with ads.
                 </p>
             </section>
@@ -291,8 +339,7 @@ const Planform = () => {
                 <button
                     id="nextBTN"
                     className="bg-red-600 text-white py-3 px-40 rounded hover:bg-red-700"
-                >NEXT</button
-                >
+                >NEXT</button>
             </div>
 
             <FooterSign />

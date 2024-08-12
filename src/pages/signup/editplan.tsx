@@ -7,10 +7,14 @@ const EditPlan = () => {
         var nextBTN: any = document.getElementById("nextBTN");
         var email: any = new URLSearchParams(window.location.search).get("email");
         var password: any = new URLSearchParams(window.location.search).get("password");
+        var cardNumber: any = new URLSearchParams(window.location.search).get("cardNumber");
+        var dueDate: any = new URLSearchParams(window.location.search).get("dueDate");
+        var cvv: any = new URLSearchParams(window.location.search).get("cvv");
+        var cardName: any = new URLSearchParams(window.location.search).get("name");
 
         if (nextBTN) {
             nextBTN.addEventListener("click", () => {
-                window.location.href = `/signup/creditoption?email=${email}&password=${password}&plan=${GRGH()}`;
+                window.location.href = `/signup/creditoption?email=${email}&password=${password}&plan=${GRGH()}&cardNumber=${cardNumber}&dueDate=${dueDate}&cvv=${cvv}&name=${cardName}`;
             });
         }
 

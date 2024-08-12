@@ -1,15 +1,27 @@
+import { useEffect } from "react";
 import Line from "./components/Line";
 import NavbarOut from "./components/NavbarOut";
 
 const App = () => {
-  const element: any = document.getElementById('btnStart');
-  
-  if (element) {
-    element.addEventListener('click', () => {
-      const email = document.getElementById('email')!.value;
-      window.location.href = `/signup/registration?email=${email}`;
-    });
-  }
+  useEffect(() => {
+    const element: any = document.getElementById('btnStart');
+
+    if (element) {
+      element.addEventListener('click', () => {
+        const email = document.getElementById('email')!.value;
+        window.location.href = `/signup/registration?email=${email}`;
+      });
+    }
+
+    return () => {
+      if (element) {
+        element.removeEventListener('click', () => {
+          const email = document.getElementById('email')!.value;
+          window.location.href = `/signup/registration?email=${email}`;
+        });
+      }
+    }
+  }, []);
 
   return (
     <main>
@@ -480,7 +492,7 @@ const App = () => {
                                                                                                                                                       offset="0.5"
                                                                                                                                                       stop-color="#CE3A00"></stop><stop
                                                                                                                                                         offset="1"
-              stop-color="#A60A5E"></stop></linearGradient></defs></svg>
+                                                                                                                                                        stop-color="#A60A5E"></stop></linearGradient></defs></svg>
           </div>
           <div className="w-2/3 py-5 px-7">
             <h1 className="font-extrabold text-xl">

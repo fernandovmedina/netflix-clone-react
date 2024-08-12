@@ -119,7 +119,7 @@ const PaymentPicker = () => {
                             className="flex items-center w-full border-2 border-gray-400 rounded px-3 py-3 cursor-pointer"
                         >
                             <div className="w-5/6 flex items-center">
-                                <h4 className="mr-2">Gift card (OBVIOUSLY DOESN'T WORK)</h4>
+                                <h4 className="mr-2">Gift card</h4>
                                 <img src="/GIFT_CODE.png" alt="payment_image" />
                             </div>
                             <div className="w-1/6 flex justify-end">

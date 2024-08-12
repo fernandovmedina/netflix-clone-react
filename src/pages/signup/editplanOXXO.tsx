@@ -5,6 +5,8 @@ import NavbarSign from "../../components/NavbarSign";
 const EditPlanOxxo = () => {
     var email = new URLSearchParams(window.location.search).get("email");
     var password = new URLSearchParams(window.location.search).get("password");
+    var clientName = new URLSearchParams(window.location.search).get("clientName");
+    var phoneNumber = new URLSearchParams(window.location.search).get("phoneNumber");
 
     var bool_1: boolean = false;
     var bool_2: boolean = false;
@@ -15,7 +17,7 @@ const EditPlanOxxo = () => {
 
         if (nextBTN) {
             nextBTN.addEventListener("click", () => {
-                window.location.href = `/signup/cashPaymentOption?email=${email}&password=${password}&plan=${GRGH()}`;
+                window.location.href = `/signup/cashPaymentOption?email=${email}&password=${password}&plan=${GRGH()}&clientName=${clientName}&phoneNumber=${phoneNumber}`;
             });
         }
 

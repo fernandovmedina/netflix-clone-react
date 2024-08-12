@@ -6,9 +6,12 @@ const GiftOption = () => {
     const email = new URLSearchParams(window.location.search).get("email");
     const password = new URLSearchParams(window.location.search).get("password");
     const plan = new URLSearchParams(window.location.search).get("plan");
+    const giftCodeURL = new URLSearchParams(window.location.search).get("giftCode")
 
     useEffect(() => {
         const element = document.getElementById("chn")
+
+        const giftCode = document.getElementById("giftCode");
 
         if (element) {
             element.addEventListener("click", () => {
@@ -61,7 +64,7 @@ const GiftOption = () => {
 
         if (change) {
             change.addEventListener("click", () => {
-                window.location.href = `/signup/editplanGIFT?email=${email}&password=${password}&plan=${plan}`;
+                window.location.href = `/signup/editplanGIFT?email=${email}&password=${password}&plan=${plan}&giftCode=${giftCode.value}`;
             });
         }
 
@@ -112,6 +115,8 @@ const GiftOption = () => {
                     <input
                         type="text"
                         placeholder="PIN or gift code"
+                        id="giftCode"
+                        value={giftCodeURL}
                         required
                         className="border-2 border-gray-400 px-3 py-2 w-full my-2"
                     />

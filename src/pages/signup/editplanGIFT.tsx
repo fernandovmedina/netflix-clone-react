@@ -5,6 +5,7 @@ import NavbarSign from "../../components/NavbarSign";
 const EditPlanGift = () => {
     var email = new URLSearchParams(window.location.search).get("email");
     var password = new URLSearchParams(window.location.search).get("password");
+    const giftCode = new URLSearchParams(window.location.search).get("giftCode");
 
     var bool_1: boolean = false;
     var bool_2: boolean = false;
@@ -15,7 +16,7 @@ const EditPlanGift = () => {
 
         if (nextBTN) {
             nextBTN.addEventListener("click", () => {
-                window.location.href = `/signup/giftoption?email=${email}&password=${password}&plan=${GRGH()}`;
+                window.location.href = `/signup/giftoption?email=${email}&password=${password}&plan=${GRGH()}&giftCode=${giftCode}`;
             });
         }
 

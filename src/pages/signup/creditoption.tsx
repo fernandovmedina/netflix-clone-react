@@ -1,8 +1,13 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import FooterSign from "../../components/FooterSign";
 import NavbarSign from "../../components/NavbarSign";
 
 const CreditOption = () => {
+    const cardNumberURL = new URLSearchParams(window.location.search).get("cardNumber");
+    const dueDateURL = new URLSearchParams(window.location.search).get("dueDate");
+    const cvvURL = new URLSearchParams(window.location.search).get("cvv");
+    const nameURL = new URLSearchParams(window.location.search).get("name");
+
     useEffect(() => {
         var inf: any = document.getElementById("inf");
         var hidden: any = document.getElementById("hidden");
@@ -14,14 +19,19 @@ const CreditOption = () => {
             });
         }
 
-        var change: any = document.getElementById("change");
+        var cardNumber = document.getElementById("cardNumber");
+        var dueDate = document.getElementById("dueDate");
+        var cvv = document.getElementById("cvv");
+        var cardName = document.getElementById("cardName");
+
+        var change: HTMLElement | any = document.getElementById("change");
         const email = new URLSearchParams(window.location.search).get("email");
         const password = new URLSearchParams(window.location.search).get("password");
         const plan = new URLSearchParams(window.location.search).get("plan");
 
         if (change) {
             change.addEventListener("click", () => {
-                window.location.href = `/signup/editplan?email=${email}&password=${password}&plan=${plan}`;
+                window.location.href = `/signup/editplan?email=${email}&password=${password}&plan=${plan}&cardNumber=${cardNumber.value}&dueDate=${dueDate.value}&cvv=${cvv.value}&name=${cardName.value}`;
             });
         }
 
@@ -132,7 +142,7 @@ const CreditOption = () => {
                     </div>
                     <form action="" method="post">
                         <div className="flex border-2 border-gray-500 rounded px-3 py-2">
-                            <input type="text" placeholder="Card number" required />
+                            <input type="text" placeholder="Card number" id="cardNumber" value={cardNumberURL} required />
                             <div className="w-full flex justify-end">
                                 <img src="/card.png" alt="card_image" className="w-7" />
                             </div>
@@ -141,6 +151,8 @@ const CreditOption = () => {
                             <input
                                 type="text"
                                 placeholder="Due date"
+                                value={dueDateURL}
+                                id="dueDate"
                                 required
                                 className="border-2 mr-1 border-gray-500 rounded px-3 py-2"
                             />
@@ -150,6 +162,8 @@ const CreditOption = () => {
                                 <input
                                     type="text"
                                     placeholder="CVV"
+                                    id="cvv"
+                                    value={cvvURL}
                                     required
                                     className="w-[50%]"
                                 />
@@ -165,7 +179,9 @@ const CreditOption = () => {
                         <input
                             type="text"
                             placeholder="Name in the card"
+                            id="cardName"
                             required
+                            value={nameURL}
                             className="w-full border-2 border-gray-500 rounded px-3 py-2"
                         />
                         <div className="bg-gray-200 p-3 flex my-2 rounded">

@@ -20,6 +20,10 @@ import EditPlanGift from './pages/signup/editplanGIFT.tsx'
 import EditPlanOxxo from './pages/signup/editplanOXXO.tsx'
 import GiftOption from './pages/signup/giftoption.tsx'
 import PaymentPicker from './pages/signup/paymentPicker.tsx'
+import Planform from './pages/signup/planform.tsx'
+import Regform from './pages/signup/regform.tsx'
+import Registration from './pages/signup/registration.tsx'
+import VerifyEmail from './pages/signup/verifyemail.tsx'
 
 const router = createBrowserRouter([
   {
@@ -85,6 +89,22 @@ const router = createBrowserRouter([
   {
     path: "/signup/paymentPicker",
     element: <PaymentPicker />
+  },
+  {
+    path: "/signup/planform",
+    element: <Planform />
+  },
+  {
+    path: "/signup/regform",
+    element: <Regform />
+  },
+  {
+    path: "/signup/registration",
+    element: <Registration />
+  },
+  {
+    path: "/signup/verifyemail",
+    element: <VerifyEmail />
   }
 ])
 

@@ -1,18 +1,33 @@
+import { useEffect } from "react";
 import FooterSign from "../../components/FooterSign";
 import NavbarSign from "../../components/NavbarSign";
 
 const Regform = () => {
     var email: any = new URLSearchParams(window.location.search).get("email");
-    var emailInput: any = document.getElementById("email");
-    var password: any = document.getElementById("password");
 
-    emailInput.value = email;
+    useEffect(() => {
+        var emailInput: any = document.getElementById("email");
+        var password: any = document.getElementById("password");
+        var btn: any = document.getElementById("btn");
 
-    var btn: any = document.getElementById("btn");
+        if (emailInput && password && btn) {
+            emailInput.value = email;
 
-    btn.addEventListener("click", () => {
-        window.location.href = `/signup/verifyemail?email=${email}&password=${password.value}`;
-    });
+            btn.addEventListener("click", () => {
+                window.location.href = `/signup/verifyemail?email=${email}&password=${password.value}`;
+            });
+        }
+
+        return () => {
+            if (emailInput && password && btn) {
+                emailInput.value = email;
+    
+                btn.removeEventListener("click", () => {
+                    window.location.href = `/signup/verifyemail?email=${email}&password=${password.value}`;
+                });
+            }
+        }
+    }, []);
 
     return (
         <main>
@@ -22,8 +37,7 @@ const Regform = () => {
                 <div className="py-40 w-[35%]">
                     <h6 className="text-sm">
                         STEP <span className="font-bold">1</span> OF <span className="font-bold"
-                        >4</span
-                        >
+                        >4</span>
                     </h6>
                     <h1 className="font-extrabold text-4xl pb-3">
                         Create a password to start your membership
@@ -47,8 +61,7 @@ const Regform = () => {
                         <button
                             id="btn"
                             className="text-center bg-red-600 mt-3 py-2 text-white rounded hover:bg-red-700"
-                        >NEXT</button
-                        >
+                        >NEXT</button>
                     </div>
                 </div>
             </section>

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import FooterSign from "../../components/FooterSign";
 import NavbarSign from "../../components/NavbarSign";
 
@@ -5,11 +6,33 @@ const VerifyEmail = () => {
     var email: any = new URLSearchParams(window.location.search).get("email");
     var password: any = new URLSearchParams(window.location.search).get("password");
 
-    document.getElementById("emailSpan")!.innerHTML = email;
+    useEffect(() => {
+        const emailSpan = document.getElementById("emailSpan")
 
-    document.getElementById("href")!.addEventListener("click", () => {
-        window.location.href = `/signup?email=${email}&password=${password}`;
-    });
+        if (emailSpan) {
+            emailSpan.innerHTML = email;
+        }
+
+        const hhref = document.getElementById("href")
+
+        if (hhref) {
+            hhref.addEventListener("click", () => {
+                window.location.href = `/signup?email=${email}&password=${password}`;
+            });
+        }
+
+        return () => {
+            if (hhref) {
+                hhref.removeEventListener("click", () => {
+                    window.location.href = `/signup?email=${email}&password=${password}`;
+                });
+            }
+            
+            if (emailSpan) {
+                emailSpan.innerHTML = email;
+            }
+        }
+    }, []);
 
     return (
         <main>
@@ -42,8 +65,7 @@ const VerifyEmail = () => {
                         <button
                             id="href"
                             className="bg-gray-300 hover:bg-gray-400 w-full rounded text-xl font-bold py-3"
-                        >OMITIR</button
-                        >
+                        >OMITIR</button>
                     </div>
                 </div>
             </section>
