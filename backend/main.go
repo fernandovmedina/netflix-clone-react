@@ -3,7 +3,10 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 	"time"
+
+	"github.com/joho/godotenv"
 
 	"github.com/fernandovmedina/netflix-clone-react/backend/src/database"
 )
@@ -15,10 +18,18 @@ func main() {
 		log.Println(err.Error())
 	}
 
+	if err = godotenv.Load(); err != nil {
+		log.Println(err.Error())
+	}
+
+	var (
+		serverPort string = os.Getenv("SERVER_PORT")
+	)
+
 	var router = http.NewServeMux()
 
 	var server = http.Server{
-		Addr:         ":8000",
+		Addr:         serverPort,
 		Handler:      router,
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
