@@ -18,6 +18,7 @@ func Title(w http.ResponseWriter, r *http.Request) {
 
 		if err = godotenv.Load(); err != nil {
 			log.Printf("Error on microservices/icons: %v\n", err.Error())
+			return
 		}
 
 		var id = r.URL.Query().Get("id")
@@ -27,12 +28,14 @@ func Title(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			log.Printf("Error on microservices/icons: %v\n", err.Error())
+			return
 		}
 
 		idINT, err := strconv.Atoi(id)
 
 		if err != nil {
 			log.Printf("Error on microservices/icons: %v\n", err.Error())
+			return
 		}
 
 		var imgURL = os.Getenv("NETFLIX_IMAGES_FOLDER") + "/" + title + "/" + dir[idINT-1].Name()
@@ -41,6 +44,7 @@ func Title(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			log.Printf("Error on microservices/icons: %v\n", err.Error())
+			return
 		}
 
 		http.ServeFile(w, r, imgURL)
@@ -55,12 +59,14 @@ func Titles(w http.ResponseWriter, r *http.Request) {
 
 		if err = godotenv.Load(); err != nil {
 			log.Printf("Error on microservices/icons: %v\n", err.Error())
+			return
 		}
 
 		directories, err := os.ReadDir(os.Getenv("NETFLIX_IMAGES_FOLDER"))
 
 		if err != nil {
 			log.Printf("Error on microservices/icons: %v\n", err.Error())
+			return
 		}
 
 		type Dir struct {
@@ -75,6 +81,7 @@ func Titles(w http.ResponseWriter, r *http.Request) {
 
 			if err != nil {
 				log.Printf("Error on microservices/icons: %v\n", err.Error())
+				return
 			}
 
 			dirs = append(dirs, Dir{Name: directories[i].Name(), Len: len(dir)})
@@ -85,6 +92,7 @@ func Titles(w http.ResponseWriter, r *http.Request) {
 			"body":   dirs,
 		}); err != nil {
 			log.Printf("Error on microservices/icons: %v\n", err.Error())
+			return
 		}
 	}
 }

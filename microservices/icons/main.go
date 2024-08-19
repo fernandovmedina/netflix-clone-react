@@ -29,7 +29,7 @@ func main() {
 
 	var server http.Server = http.Server{
 		Addr:           serverAdd,
-		Handler:        Middleware(mux),
+		Handler:        mux,
 		WriteTimeout:   20 * time.Second,
 		ReadTimeout:    20 * time.Second,
 		MaxHeaderBytes: http.DefaultMaxHeaderBytes,
@@ -38,18 +38,4 @@ func main() {
 	log.Printf("Microservice running on %s\n", serverAdd)
 
 	log.Fatal(server.ListenAndServe())
-}
-
-func Middleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-
-		if r.Method == http.MethodOptions {
-			return
-		}
-
-		next.ServeHTTP(w, r)
-	})
 }
