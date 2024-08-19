@@ -17,7 +17,7 @@ func Title(w http.ResponseWriter, r *http.Request) {
 		var err error
 
 		if err = godotenv.Load(); err != nil {
-			log.Printf("Error on microservices/profile-images: %v\n", err.Error())
+			log.Printf("Error on microservices/icons: %v\n", err.Error())
 		}
 
 		var id = r.URL.Query().Get("id")
@@ -26,13 +26,13 @@ func Title(w http.ResponseWriter, r *http.Request) {
 		dir, err := os.ReadDir(os.Getenv("NETFLIX_IMAGES_FOLDER") + "/" + title)
 
 		if err != nil {
-			log.Printf("Error on microservices/profile-images: %v\n", err.Error())
+			log.Printf("Error on microservices/icons: %v\n", err.Error())
 		}
 
 		idINT, err := strconv.Atoi(id)
 
 		if err != nil {
-			log.Printf("Error on microservices/profile-images: %v\n", err.Error())
+			log.Printf("Error on microservices/icons: %v\n", err.Error())
 		}
 
 		var imgURL = os.Getenv("NETFLIX_IMAGES_FOLDER") + "/" + title + "/" + dir[idINT-1].Name()
@@ -40,7 +40,7 @@ func Title(w http.ResponseWriter, r *http.Request) {
 		_, err = os.ReadFile(imgURL)
 
 		if err != nil {
-			log.Printf("Error on microservices/profile-images: %v\n", err.Error())
+			log.Printf("Error on microservices/icons: %v\n", err.Error())
 		}
 
 		http.ServeFile(w, r, imgURL)
@@ -54,13 +54,13 @@ func Titles(w http.ResponseWriter, r *http.Request) {
 		var err error
 
 		if err = godotenv.Load(); err != nil {
-			log.Printf("Error on microservices/profile-images: %v\n", err.Error())
+			log.Printf("Error on microservices/icons: %v\n", err.Error())
 		}
 
 		directories, err := os.ReadDir(os.Getenv("NETFLIX_IMAGES_FOLDER"))
 
 		if err != nil {
-			log.Printf("Error on microservices/profile-images: %v\n", err.Error())
+			log.Printf("Error on microservices/icons: %v\n", err.Error())
 		}
 
 		type Dir struct {
@@ -74,7 +74,7 @@ func Titles(w http.ResponseWriter, r *http.Request) {
 			dir, err := os.ReadDir(os.Getenv("NETFLIX_IMAGES_FOLDER") + "/" + directories[i].Name())
 
 			if err != nil {
-				log.Printf("Error on microservices/profile-images: %v\n", err.Error())
+				log.Printf("Error on microservices/icons: %v\n", err.Error())
 			}
 
 			dirs = append(dirs, Dir{Name: directories[i].Name(), Len: len(dir)})
@@ -84,7 +84,7 @@ func Titles(w http.ResponseWriter, r *http.Request) {
 			"status": http.StatusOK,
 			"body":   dirs,
 		}); err != nil {
-			log.Printf("Error on microservices/profile-images: %v\n", err.Error())
+			log.Printf("Error on microservices/icons: %v\n", err.Error())
 		}
 	}
 }

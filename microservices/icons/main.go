@@ -8,14 +8,14 @@ import (
 
 	"github.com/joho/godotenv"
 
-	"github.com/fernandovmedina/netflix-clone/microservices/profile-images/handlers"
+	"github.com/fernandovmedina/netflix-clone/microservices/icons/handlers"
 )
 
 func main() {
 	var err error
 
 	if err = godotenv.Load(); err != nil {
-		log.Printf("Error on microservices/profile-images: %v\n", err.Error())
+		log.Printf("Error on microservices/icons: %v\n", err.Error())
 	}
 
 	var (
@@ -42,17 +42,14 @@ func main() {
 
 func Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Configura los encabezados CORS
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 
-		// Si es una solicitud OPTIONS, responde de inmediato
 		if r.Method == http.MethodOptions {
 			return
 		}
 
-		// Llama al siguiente handler
 		next.ServeHTTP(w, r)
 	})
 }
