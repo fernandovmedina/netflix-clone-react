@@ -9,6 +9,7 @@ import (
 	"github.com/joho/godotenv"
 
 	"github.com/fernandovmedina/netflix-clone-react/backend/src/database"
+	"github.com/fernandovmedina/netflix-clone-react/backend/src/middleware"
 )
 
 func main() {
@@ -28,11 +29,15 @@ func main() {
 
 	var router = http.NewServeMux()
 
+	handler := middleware.CORS(router)
+	handler = middleware.Init(handler)
+
 	var server = http.Server{
-		Addr:         serverPort,
-		Handler:      router,
-		WriteTimeout: 15 * time.Second,
-		ReadTimeout:  15 * time.Second,
+		Addr:           serverPort,
+		Handler:        handler,
+		WriteTimeout:   15 * time.Second,
+		ReadTimeout:    15 * time.Second,
+		MaxHeaderBytes: http.DefaultMaxHeaderBytes,
 	}
 
 	if err = server.ListenAndServe(); err != nil {
