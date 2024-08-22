@@ -32,12 +32,15 @@ func main() {
 	router.HandleFunc("/microservice/backgrounds", handlers.Backgrounds)
 	router.HandleFunc("/microservice/background", handlers.Background)
 
+	handler := handlers.CORS(router)
+	handler = handlers.Middleware(handler)
+
 	var server = http.Server{
 		Addr:           serverPort,
+		Handler:        handler,
 		WriteTimeout:   15 * time.Second,
 		ReadTimeout:    15 * time.Second,
 		MaxHeaderBytes: http.DefaultMaxHeaderBytes,
-		Handler:        router,
 	}
 
 	log.Printf("Microservice running on %s", serverPort)
