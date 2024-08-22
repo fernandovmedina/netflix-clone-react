@@ -27,9 +27,12 @@ func main() {
 	mux.HandleFunc("/microservice/title", handlers.Title)
 	mux.HandleFunc("/microservice/titles", handlers.Titles)
 
+	handler := handlers.CORS(mux)
+	handler = handlers.Middleware(handler)
+
 	var server http.Server = http.Server{
 		Addr:           serverAdd,
-		Handler:        mux,
+		Handler:        handler,
 		WriteTimeout:   20 * time.Second,
 		ReadTimeout:    20 * time.Second,
 		MaxHeaderBytes: http.DefaultMaxHeaderBytes,
