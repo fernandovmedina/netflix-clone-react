@@ -43,7 +43,7 @@ func main() {
 		MaxHeaderBytes: http.DefaultMaxHeaderBytes,
 	}
 
-	log.Printf("Microservice running on %s", serverPort)
+  log.Println("[BACKGROUNDS] Microservice running on http://127.0.0.1:8020")
 
 	log.Fatal(server.ListenAndServe())
 }

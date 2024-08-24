@@ -1,0 +1,18 @@
+# JSON example to register one or many users
+
+"body": {
+    "email":    "example@example.com",
+    "password": "password",
+    "users: {
+        "0": {
+            "name": "Fernando",
+            "icon": "source",
+            "type:  "type"
+        },
+        "1": {
+            "name": "Mariajose",
+            "icon": "source",
+            "type:  "type
+        }
+    }
+}

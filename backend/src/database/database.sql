@@ -154,3 +154,32 @@ CREATE TABLE IF NOT EXISTS USERS (
     ID_ACCOUNT INT NOT NULL,
     CONSTRAINT FK_USERS_TO_ACCOUNTS FOREIGN KEY (ID_ACCOUNT) REFERENCES ACCOUNTS (ID_ACCOUNT)
 ); 
+
+DELIMITER //
+
+CREATE FUNCTION INSERT_ACCOUNT_AND_USER(
+    in_email TEXT,
+    in_pass TEXT,
+    in_token TEXT,
+    in_name TEXT,
+    in_id_icon INT,
+    in_id_type INT
+)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE new_account_id INT;
+
+    INSERT INTO ACCOUNTS (EMAIL, PASS, TOKEN)
+    VALUES (in_email, in_pass, in_token);
+
+    SET new_account_id = LAST_INSERT_ID();
+
+    INSERT INTO USERS (NAME, ID_ICON, ID_TYPE, ID_ACCOUNT)
+    VALUES (in_name, in_id_icon, in_id_type, new_account_id);
+
+    RETURN new_account_id;
+END //
+
+DELIMITER ;
+
