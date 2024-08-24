@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -90,15 +92,11 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
+	var token = sha256.Sum256([]byte(register.Body.Email))
 
-	var users []User
+	var tokenSTR = hex.EncodeToString(token[:])
 
-	for _, v := range register.Body.Users {
-		users = append(users, v)
-	}
-
-	_, err := database.DB.Exec("")
+	_, err := database.DB.Exec("INSERT INTO ACCOUNTS(EMAIL,PASS,TOKEN)VALUES(?,?,?)", register.Body.Email, register.Body.Password, tokenSTR)
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -111,6 +109,29 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	for _, v := range register.Body.Users {
+		_, err = database.DB.Exec("INSERT INTO USERS(NAME,EMAIL,ID_ICON,ID_TYPE,ID_ACCOUNT)VALUES(?,?,?,?,(SELECT ID_ACCOUNT FROM ACCOUNTS WHERE EMAIL=?))", v.Name, register.Body.Email, v.Icon, v.Type, register.Body.Email)
+
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"status_code": http.StatusInternalServerError,
+				"body": map[string]interface{}{
+					"error": err.Error(),
+				},
+			})
+			return
+		}
+	}
+
+	w.WriteHeader(http.StatusCreated)
+
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"status_code": http.StatusCreated,
+		"body": map[string]interface{}{
+			"text": "account registered successfully",
+		},
+	})
 }
 
 func SignOut(w http.ResponseWriter, r *http.Request) {
