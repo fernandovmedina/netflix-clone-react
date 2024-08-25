@@ -8,11 +8,16 @@ import (
 
 	"github.com/joho/godotenv"
 
+	"github.com/fernandovmedina/netflix-clone/microservices/icons/database"
 	"github.com/fernandovmedina/netflix-clone/microservices/icons/handlers"
 )
 
 func main() {
 	var err error
+
+	if _, err = database.ConnDB(); err != nil {
+		log.Printf("Error on microservices/icons: %s\n", err.Error())
+	}
 
 	if err = godotenv.Load(); err != nil {
 		log.Printf("Error on microservices/icons: %v\n", err.Error())
@@ -27,18 +32,20 @@ func main() {
 	mux.HandleFunc("/microservice/title", handlers.Title)
 	mux.HandleFunc("/microservice/titles", handlers.Titles)
 
-	handler := handlers.CORS(mux)
-	handler = handlers.Middleware(handler)
+	/*
+		handler := handlers.CORS(mux)
+		handler = handlers.Middleware(handler)
+	*/
 
 	var server http.Server = http.Server{
 		Addr:           serverAdd,
-		Handler:        handler,
+		Handler:        mux,
 		WriteTimeout:   20 * time.Second,
 		ReadTimeout:    20 * time.Second,
 		MaxHeaderBytes: http.DefaultMaxHeaderBytes,
 	}
 
-  log.Println("[ICONS] Microservice running on http://127.0.0.1:8010")
+	log.Println("[ICONS] Microservice running on http://127.0.0.1:8010")
 
 	log.Fatal(server.ListenAndServe())
 }
