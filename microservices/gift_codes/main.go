@@ -39,5 +39,7 @@ func main() {
 		MaxHeaderBytes: http.DefaultMaxHeaderBytes,
 	}
 
+  log.Println("[GIFT_CODES] Microservice running on http://127.0.0.1:8040/microservice/gift_code")
+
 	log.Fatal(server.ListenAndServe())
 }
