@@ -1,3 +1,5 @@
+[REGISTRATION JSON EXAMPLE]
+
 "body": {
     "email":    "example@example.com",
     "password": "password",
@@ -12,5 +14,20 @@
             "icon": "source",
             "type:  "type
         }
+    },
+    "payload": {
+        (It can be these 3 types of payload, the user choose the one)
+        "type": "card",
+        "card_number": "123456789123",
+        "due_date": "03/26",
+        "cvv": "986",
+        "owner": "Fernando Alejandro Vazquez Medina"
+        ---------------
+        "type": "oxxo",
+        "phone_number": "8441234567",
+        "name": "Fernando Alejandro Vazquez Medina"
+        ---------------
+        "type": "gift",
+        "gift_code": "1234123412341234"
     }
 }

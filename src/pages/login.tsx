@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 const Login = () => {
     useEffect(() => {
-        const rmb = document.getElementById("remember");
+        const rmb: any = document.getElementById("remember");
         const btn = document.getElementById("btn");
         const inf = document.getElementById("inf");
         const hidden = document.getElementById("hidden");
@@ -20,7 +20,6 @@ const Login = () => {
             });
         }
 
-        // Cleanup event listeners when the component is unmounted
         return () => {
             if (rmb && btn) {
                 rmb.removeEventListener("click", () => {
@@ -34,7 +33,7 @@ const Login = () => {
                 });
             }
         };
-    }, []); // El array vacío [] asegura que este efecto solo se ejecute una vez, después del primer renderizado
+    }, []);
 
     return (
         <main>
@@ -70,12 +69,12 @@ const Login = () => {
                             <input
                                 type="email"
                                 placeholder="Email"
-                                className="mb-3 bg-transparent border-2 border-gray-500 rounded-md px-3 py-2"
+                                className="mb-3 bg-transparent border-2 border-gray-500 rounded-md px-3 py-2 text-white placeholder:text-white"
                             />
                             <input
                                 type="password"
                                 placeholder="Password"
-                                className="mb-3 bg-transparent border-2 border-gray-500 rounded-md px-3 py-2"
+                                className="mb-3 bg-transparent border-2 border-gray-500 rounded-md px-3 py-2 text-white placeholder:text-white"
                             />
                             <button
                                 type="submit"
@@ -91,7 +90,7 @@ const Login = () => {
                                 className="mx-auto hover:underline hover:underline-offset-1"
                             >Forgot your password?</a>
                             <div className="flex py-2">
-                                <input type="checkbox" checked id="btn" />
+                                <input type="checkbox" id="remember_btn" />
                                 <button type="button" id="remember" className="ml-3"
                                 >Remember me</button>
                             </div>

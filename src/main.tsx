@@ -1,9 +1,6 @@
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom"
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import './index.css'
 import AddProfile from './pages/addProfile.tsx'
 import Browse from './pages/browse.tsx'
@@ -24,6 +21,7 @@ import Planform from './pages/signup/planform.tsx'
 import Regform from './pages/signup/regform.tsx'
 import Registration from './pages/signup/registration.tsx'
 import VerifyEmail from './pages/signup/verifyemail.tsx'
+import GenerateGiftCode from './pages/signup/generateGiftCode.tsx'
 
 const router = createBrowserRouter([
   {
@@ -105,6 +103,10 @@ const router = createBrowserRouter([
   {
     path: "/signup/verifyemail",
     element: <VerifyEmail />
+  },
+  {
+    path: "/signup/generateGiftCode",
+    element: <GenerateGiftCode />,
   }
 ])
 

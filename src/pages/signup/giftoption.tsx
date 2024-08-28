@@ -10,11 +10,17 @@ const GiftOption = () => {
 
     useEffect(() => {
         const element = document.getElementById("chn")
-
+        const arrow: any = document.getElementById("arrow_back");
         const giftCode = document.getElementById("giftCode");
 
         if (element) {
             element.addEventListener("click", () => {
+                window.location.href = `/signup/paymentPicker?email=${email}&password=${password}&plan=${plan}`;
+            });
+        }
+
+        if (arrow) {
+            arrow.addEventListener('click', () => {
                 window.location.href = `/signup/paymentPicker?email=${email}&password=${password}&plan=${plan}`;
             });
         }
@@ -75,6 +81,12 @@ const GiftOption = () => {
                 });
             }
 
+            if (arrow) {
+                arrow.removeEventListener('click', () => {
+                    window.location.href = `/signup/paymentPicker?email=${email}&password=${password}&plan=${plan}`
+                });
+            }
+
             if (change) {
                 change.removeEventListener("click", () => {
                     window.location.href = `/signup/editplanGIFT?email=${email}&password=${password}&plan=${plan}`;
@@ -96,16 +108,22 @@ const GiftOption = () => {
 
             <section className="w-full flex items-center justify-center">
                 <div className="py-12 w-[35%]">
-                    <div className="flex mb-4 items-center">
-                        <img
-                            src="/behind_blue.png"
-                            alt="behind_blue_image"
-                            className="w-5"
-                        />
-                        <a
-                            id="chn"
-                            className="text-sm text-blue-500 hover:underline hover:underline-offset-1"
-                        >Change payment method</a>
+                    <div className="flex mb-4 align-center w-full">
+                        <div className="w-1/2 flex items-center">
+                            <img
+                                src="/behind_blue.png"
+                                alt="behind_blue_image"
+                                className="w-5"
+                                id="arrow_back"
+                            />
+                            <a
+                                id="chn"
+                                className="text-blue-500 hover:underline hover:underline-offset-1"
+                            >Change payment method</a>
+                        </div>
+                        <div className="w-1/2 flex justify-end">
+                            <a className="text-blue-500 hover:underline hover:underline-offset-1">Generate new gift code</a>
+                        </div>
                     </div>
                     <h5 className="text-sm">
                         STEP <span className="font-bold">4</span> OF <span className="font-bold"
