@@ -1,8 +1,21 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import FooterSign from "../components/FooterSign";
 import NavbarSign from "../components/NavbarSign";
 
 const CreateProfile = () => {
+    const email: string | null = new URLSearchParams(window.location.search).get("email");
+    const password: string | null = new URLSearchParams(window.location.search).get("password");
+    const plan: string | null = new URLSearchParams(window.location.search).get("plan");
+    const cardNumber: string | null = new URLSearchParams(window.location.search).get("cardNumber");
+    const dueDate: string | null = new URLSearchParams(window.location.search).get("dueDate");
+    const cvv: string | null = new URLSearchParams(window.location.search).get("cvv");
+    const cardName: string | null = new URLSearchParams(window.location.search).get("name");
+
+    const createJSON = () => {
+        const object = {}
+        return JSON.stringify(object);
+    }
+
     useEffect(() => {
         const spawns = document.getElementById("spawns");
         const add = document.getElementById("add");

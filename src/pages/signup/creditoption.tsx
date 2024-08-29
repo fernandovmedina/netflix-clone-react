@@ -39,7 +39,7 @@ const CreditOption = () => {
 
         if (smBTN) {
             smBTN.addEventListener("click", () => {
-                window.location.href = "/createProfile";
+                window.location.href = `/createProfile?email=${email}&password=${password}&plan=${plan}&cardNumber=${cardNumber.value}&dueDate=${dueDate.value}&cvv=${cvv.value}&name=${cardName.value}`;
             });
         }
 

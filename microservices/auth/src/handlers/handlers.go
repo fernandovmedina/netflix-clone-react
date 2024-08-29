@@ -8,8 +8,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/fernandovmedina/netflix-clone-react/microservices/auth/src/database"
 	"golang.org/x/crypto/bcrypt"
+
+	"github.com/fernandovmedina/netflix-clone-react/microservices/auth/src/database"
 )
 
 // Cookie.Value = example@example.com password
@@ -96,7 +97,20 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	var tokenSTR = hex.EncodeToString(token[:])
 
-	_, err := database.DB.Exec("INSERT INTO ACCOUNTS(EMAIL,PASS,TOKEN)VALUES(?,?,?)", register.Body.Email, register.Body.Password, tokenSTR)
+	email, err := bcrypt.GenerateFromPassword([]byte(register.Body.Password), bcrypt.DefaultCost)
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"status_code": http.StatusInternalServerError,
+			"body": map[string]interface{}{
+				"error": err.Error(),
+			},
+		})
+		return
+	}
+
+	_, err = database.DB.Exec("INSERT INTO ACCOUNTS(EMAIL,PASS,TOKEN)VALUES(?,?,?)", email, register.Body.Password, tokenSTR)
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
