@@ -31,15 +31,17 @@ func main() {
 
 	mux.HandleFunc("GET /microservice/gift_code", handlers.New)
 
+	var handler = handlers.CORS(mux)
+
 	var server = http.Server{
-		Handler:        mux,
+		Handler:        handler,
 		Addr:           routerPort,
 		WriteTimeout:   15 * time.Second,
 		ReadTimeout:    15 * time.Second,
 		MaxHeaderBytes: http.DefaultMaxHeaderBytes,
 	}
 
-  log.Println("[GIFT_CODES] Microservice running on http://127.0.0.1:8040/microservice/gift_code")
+	log.Println("[GIFT_CODES] Microservice running on http://127.0.0.1:8040/microservice/gift_code")
 
 	log.Fatal(server.ListenAndServe())
 }

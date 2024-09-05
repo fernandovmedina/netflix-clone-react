@@ -122,7 +122,7 @@ const GiftOption = () => {
                             >Change payment method</a>
                         </div>
                         <div className="w-1/2 flex justify-end">
-                            <a className="text-blue-500 hover:underline hover:underline-offset-1">Generate new gift code</a>
+                            <a href="/signup/generateGiftCode" className="text-blue-500 hover:underline hover:underline-offset-1">Generate new gift code</a>
                         </div>
                     </div>
                     <h5 className="text-sm">
