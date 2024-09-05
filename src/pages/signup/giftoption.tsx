@@ -12,11 +12,18 @@ const GiftOption = () => {
         const element = document.getElementById("chn")
         const arrow: any = document.getElementById("arrow_back");
         const giftCode = document.getElementById("giftCode");
+        const generate: any = document.getElementById("generate");
 
         if (element) {
             element.addEventListener("click", () => {
                 window.location.href = `/signup/paymentPicker?email=${email}&password=${password}&plan=${plan}`;
             });
+        }
+
+        if (generate) {
+            generate.addEventListener('click', () => {
+                window.location.href = `/signup/generateGiftCode?email=${email}&password=${password}&plan=${plan}`
+            })
         }
 
         if (arrow) {
@@ -81,6 +88,12 @@ const GiftOption = () => {
                 });
             }
 
+            if (generate) {
+                generate.removeEventListener('click', () => {
+                    window.location.href = `/signup/generateGiftCode?email=${email}&password=${password}&plan=${plan}`
+                })
+            }
+
             if (arrow) {
                 arrow.removeEventListener('click', () => {
                     window.location.href = `/signup/paymentPicker?email=${email}&password=${password}&plan=${plan}`
@@ -122,7 +135,7 @@ const GiftOption = () => {
                             >Change payment method</a>
                         </div>
                         <div className="w-1/2 flex justify-end">
-                            <a href="/signup/generateGiftCode" className="text-blue-500 hover:underline hover:underline-offset-1">Generate new gift code</a>
+                            <a id="generate" className="text-blue-500 hover:underline hover:underline-offset-1">Generate new gift code</a>
                         </div>
                     </div>
                     <h5 className="text-sm">
