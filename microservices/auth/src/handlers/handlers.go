@@ -71,9 +71,11 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	type Body struct {
-		Email    string          `json:"email"`
-		Password string          `json:"password"`
-		Users    map[string]User `json:"users"`
+		Email    string            `json:"email"`
+		Password string            `json:"password"`
+		Plan     string            `json:"plan"`
+		Users    map[string]User   `json:"users"`
+		Payload  map[string]string `json:"payload"`
 	}
 
 	type RegisterRequest struct {
@@ -97,7 +99,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	var tokenSTR = hex.EncodeToString(token[:])
 
-	email, err := bcrypt.GenerateFromPassword([]byte(register.Body.Password), bcrypt.DefaultCost)
+	passcrypt, err := bcrypt.GenerateFromPassword([]byte(register.Body.Password), bcrypt.DefaultCost)
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -110,7 +112,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = database.DB.Exec("INSERT INTO ACCOUNTS(EMAIL,PASS,TOKEN)VALUES(?,?,?)", email, register.Body.Password, tokenSTR)
+	_, err = database.DB.Exec("INSERT INTO ACCOUNTS(EMAIL,PASS,TOKEN)VALUES(?,?,?)", register.Body.Email, passcrypt, tokenSTR)
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -136,6 +138,12 @@ func Register(w http.ResponseWriter, r *http.Request) {
 			})
 			return
 		}
+	}
+
+	switch {
+	case register.Body.Payload["type"] == "gift":
+	case register.Body.Payload["type"] == "oxxo":
+	case register.Body.Payload["type"] == "card":
 	}
 
 	w.WriteHeader(http.StatusCreated)

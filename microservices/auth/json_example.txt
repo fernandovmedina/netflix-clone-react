@@ -3,6 +3,7 @@
 "body": {
     "email":    "example@example.com",
     "password": "password",
+    "plan": "{ads,standard,premium}"
     "users: {
         "0": {
             "name": "Fernando",
