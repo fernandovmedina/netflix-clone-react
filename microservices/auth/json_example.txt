@@ -22,11 +22,12 @@
         "card_number": "123456789123",
         "due_date": "03/26",
         "cvv": "986",
-        "owner": "Fernando Alejandro Vazquez Medina"
+        "card_name": "Fernando Alejandro Vazquez Medina"
         ---------------
         "type": "oxxo",
         "phone_number": "8441234567",
         "name": "Fernando Alejandro Vazquez Medina"
+        "code": "some_code_generated"
         ---------------
         "type": "gift",
         "gift_code": "1234123412341234"

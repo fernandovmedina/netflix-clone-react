@@ -142,8 +142,44 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	switch {
 	case register.Body.Payload["type"] == "gift":
+		_, err = database.DB.Exec("CALL InsertPaymentAndGiftCode(?,?,?,?,?)", register.Body.Plan, time.Now(), register.Body.Email, "gift")
+
+		if err != nil {
+			w.WriteHeader(http.StatusExpectationFailed)
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"status_code": http.StatusExpectationFailed,
+				"body": map[string]interface{}{
+					"error": err.Error(),
+				},
+			})
+			return
+		}
 	case register.Body.Payload["type"] == "oxxo":
+		_, err = database.DB.Exec("CALL InsertPaymentAndOxxo(?,?,?,?,?,?,?)", register.Body.Plan, time.Now(), register.Body.Email, "oxxo", register.Body.Payload["phone_number"], register.Body.Payload["name"], register.Body.Payload["code"])
+
+		if err != nil {
+			w.WriteHeader(http.StatusExpectationFailed)
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"status_code": http.StatusExpectationFailed,
+				"body": map[string]interface{}{
+					"error": err.Error(),
+				},
+			})
+			return
+		}
 	case register.Body.Payload["type"] == "card":
+		_, err = database.DB.Exec("CALL InsertPaymentAndCard(?,?,?,?,?,?,?)", register.Body.Plan, time.Now(), register.Body.Email, "card", register.Body.Payload["card_number"], register.Body.Payload["due_date"], register.Body.Payload["cvv"], register.Body.Payload["card_name"])
+
+		if err != nil {
+			w.WriteHeader(http.StatusExpectationFailed)
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"status_code": http.StatusExpectationFailed,
+				"body": map[string]interface{}{
+					"error": err.Error(),
+				},
+			})
+			return
+		}
 	}
 
 	w.WriteHeader(http.StatusCreated)

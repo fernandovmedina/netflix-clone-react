@@ -62,7 +62,8 @@ CREATE PROCEDURE InsertPaymentAndCard(
   IN method_name VARCHAR(255),
   IN card_number VARCHAR(255),
   IN card_due VARCHAR(255),
-  IN card_cvv VARCHAR(255)
+  IN card_cvv VARCHAR(255),
+  IN card_name VARCHAR(255)
 )
 BEGIN
   DECLARE last_payment_id INT;
@@ -74,12 +75,13 @@ BEGIN
     (SELECT ID_PAYMENT_METHOD FROM PAYMENT_METHODS WHERE METHOD_NAME = method_name)
   );
   SET last_payment_id = LAST_INSERT_ID();
-  INSERT INTO CARD_PAYMENTS(CARD_NUMBER,CARD_DUE_DATE,CARD_CVV,ID_PAYMENT)
+  INSERT INTO CARD_PAYMENTS(CARD_NUMBER,CARD_DUE_DATE,CARD_CVV,ID_PAYMENT,CARD_NAME)
   VALUES (
     card_number,
     card_due,
     card_cvv,
-    last_payment_id
+    last_payment_id,
+    card_name
   );
 END //
 DELIMITER ;
