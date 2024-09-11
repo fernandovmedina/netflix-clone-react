@@ -1,6 +1,6 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
-import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import './index.css'
 import AddProfile from './pages/addProfile.tsx'
 import Browse from './pages/browse.tsx'
@@ -22,11 +22,16 @@ import Regform from './pages/signup/regform.tsx'
 import Registration from './pages/signup/registration.tsx'
 import VerifyEmail from './pages/signup/verifyemail.tsx'
 import GenerateGiftCode from './pages/signup/generateGiftCode.tsx'
+import OxxoCodeGenerator from './pages/signup/oxxoCodeGenerator.tsx'
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />, // verify accordion
+  },
+  {
+    path: "/signup/oxxoCodeGenerator",
+    element: <OxxoCodeGenerator />
   },
   {
     path: "/addProfile",
