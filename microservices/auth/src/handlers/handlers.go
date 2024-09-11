@@ -11,6 +11,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/fernandovmedina/netflix-clone-react/microservices/auth/src/database"
+	"github.com/google/uuid"
 )
 
 // Cookie.Value = example@example.com password
@@ -112,7 +113,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = database.DB.Exec("INSERT INTO ACCOUNTS(EMAIL,PASS,TOKEN)VALUES(?,?,?)", register.Body.Email, passcrypt, tokenSTR)
+	_, err = database.DB.Exec("INSERT INTO ACCOUNTS(UUID,EMAIL,PASS,TOKEN)VALUES(?,?,?,?)", uuid.New(), register.Body.Email, passcrypt, tokenSTR)
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
