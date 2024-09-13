@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"crypto/sha256"
+	"database/sql"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -64,25 +65,25 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+type User struct {
+	Name string `json:"name"`
+	//Icon int    `json:"icon"`
+	Type string `json:"type"`
+}
+
+type Body struct {
+	Email    string            `json:"email"`
+	Password string            `json:"password"`
+	Plan     string            `json:"plan"`
+	Users    map[string]User   `json:"users"`
+	Payload  map[string]string `json:"payload"`
+}
+
+type RegisterRequest struct {
+	Body Body `json:"body"`
+}
+
 func Register(w http.ResponseWriter, r *http.Request) {
-	type User struct {
-		Name string `json:"name"`
-		Icon string `json:"icon"`
-		Type string `json:"type"`
-	}
-
-	type Body struct {
-		Email    string            `json:"email"`
-		Password string            `json:"password"`
-		Plan     string            `json:"plan"`
-		Users    map[string]User   `json:"users"`
-		Payload  map[string]string `json:"payload"`
-	}
-
-	type RegisterRequest struct {
-		Body Body `json:"body"`
-	}
-
 	var register RegisterRequest
 
 	if err := json.NewDecoder(r.Body).Decode(&register); err != nil {
@@ -91,6 +92,25 @@ func Register(w http.ResponseWriter, r *http.Request) {
 			"status_code": http.StatusBadRequest,
 			"body": map[string]interface{}{
 				"error": err.Error(),
+			},
+		})
+		return
+	}
+
+	var idEmail sql.NullInt16
+
+	if err := database.DB.QueryRow("SELECT ID_ACCOUNT FROM ACCOUNTS WHERE EMAIL=?", register.Body.Email).Scan(&idEmail); err != nil {
+		if err == sql.ErrNoRows {
+			idEmail.Int16 = 0
+		}
+	}
+
+	if idEmail.Int16 != 0 {
+		w.WriteHeader(http.StatusFound)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"status_code": http.StatusFound,
+			"body": map[string]interface{}{
+				"error": "account already exists",
 			},
 		})
 		return
@@ -127,7 +147,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, v := range register.Body.Users {
-		_, err = database.DB.Exec("INSERT INTO USERS(NAME,EMAIL,ID_ICON,ID_TYPE,ID_ACCOUNT)VALUES(?,?,?,?,(SELECT ID_ACCOUNT FROM ACCOUNTS WHERE EMAIL=?))", v.Name, register.Body.Email, v.Icon, v.Type, register.Body.Email)
+		_, err = database.DB.Exec("INSERT INTO USERS(NAME,EMAIL,ID_TYPE,ID_ACCOUNT)VALUES(?,?,(SELECT ID_TYPE FROM TYPES WHERE NAME=?),(SELECT ID_ACCOUNT FROM ACCOUNTS WHERE EMAIL=?))", v.Name, register.Body.Email, v.Type, register.Body.Email)
 
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -169,7 +189,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	case register.Body.Payload["type"] == "card":
-		_, err = database.DB.Exec("CALL InsertPaymentAndCard(?,?,?,?,?,?,?)", register.Body.Plan, time.Now(), register.Body.Email, "card", register.Body.Payload["card_number"], register.Body.Payload["due_date"], register.Body.Payload["cvv"], register.Body.Payload["card_name"])
+		_, err = database.DB.Exec("CALL InsertPaymentAndCard(?,?,?,?,?,?,?,?)", register.Body.Plan, time.Now(), register.Body.Email, "card", register.Body.Payload["card_number"], register.Body.Payload["due_date"], register.Body.Payload["cvv"], register.Body.Payload["card_name"])
 
 		if err != nil {
 			w.WriteHeader(http.StatusExpectationFailed)

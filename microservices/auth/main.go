@@ -22,9 +22,11 @@ func main() {
 	mux.HandleFunc("/microservice/register", handlers.Register)
 	mux.HandleFunc("/microservice/signout", handlers.SignOut)
 
+	var handler = handlers.CORS(mux)
+
 	var server = http.Server{
 		Addr:           ":8030",
-		Handler:        mux,
+		Handler:        handler,
 		WriteTimeout:   15 * time.Second,
 		ReadTimeout:    15 * time.Second,
 		MaxHeaderBytes: http.DefaultMaxHeaderBytes,
