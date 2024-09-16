@@ -1,38 +1,24 @@
 package handlers
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"image/png"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/boombuler/barcode"
 	"github.com/boombuler/barcode/code128"
-	"github.com/fernandovmedina/netflix-clone-react/microservices/oxxo/src/database"
 	"github.com/joho/godotenv"
+
+	"github.com/fernandovmedina/netflix-clone-react/microservices/oxxo/src/database"
 )
 
 func OxxoCode(w http.ResponseWriter, r *http.Request) {
-	cookie, err := r.Cookie("auth")
+	var email = r.URL.Query().Get("email")
 
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]interface{}{
-			"status_code": http.StatusBadRequest,
-			"body": map[string]interface{}{
-				"error": err.Error(),
-			},
-		})
-		return
-	}
-
-	var values = strings.Split(cookie.Value, " ")
-
-	var email = values[0]
-
-	_, value, err := GenerateCode(email)
+	barCode, value, err := GenerateCode(email, r.URL.Query().Get("plan"))
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -45,59 +31,7 @@ func OxxoCode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = database.DB.Exec("INSERT INTO OXXO_CODES(VALUE,ID_ACCOUNT)VALUES(?,(SELECT ID_ACCOUNT FROM ACCOUNTS WHERE EMAIL=?))", &value, &email)
-
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]interface{}{
-			"status_code": http.StatusInternalServerError,
-			"body": map[string]interface{}{
-				"error": err.Error(),
-			},
-		})
-		return
-	}
-
-	json.NewEncoder(w).Encode(map[string]interface{}{
-		"status_code": http.StatusCreated,
-		"body": map[string]interface{}{
-			"text": value,
-		},
-	})
-}
-
-func OxxoCodeIMG(w http.ResponseWriter, r *http.Request) {
-	cookie, err := r.Cookie("auth")
-
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]interface{}{
-			"status_code": http.StatusBadRequest,
-			"body": map[string]interface{}{
-				"error": err.Error(),
-			},
-		})
-		return
-	}
-
-	var values = strings.Split(cookie.Value, " ")
-
-	var email = values[0]
-
-	barCode, _, err := GenerateCode(email)
-
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]interface{}{
-			"status_code": http.StatusInternalServerError,
-			"body": map[string]interface{}{
-				"error": err.Error(),
-			},
-		})
-		return
-	}
-
-	img, err := barcode.Scale(barCode, 300, 100)
+	img, err := barcode.Scale(barCode, 400, 200)
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -149,7 +83,17 @@ func OxxoCodeIMG(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = database.DB.Exec("UPDATE OXXO_CODES SET SOURCE=? WHERE ID_ACCOUNT=(SELECT ID_ACCOUNT FROM ACCOUNTS WHERE EMAIL=?)", &route, &email)
+	type OxxoCode struct {
+		Value  string `json:"value"`
+		Source string `json:"source"`
+	}
+
+	var oxxo OxxoCode
+
+	var returnedValue string
+	var returnedSource string
+
+	err = database.DB.QueryRow("CALL InsertOxxoCode(?,?)", &value, &route).Scan(&returnedValue, &returnedSource)
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -162,20 +106,20 @@ func OxxoCodeIMG(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.ServeFile(w, r, route)
+	oxxo.Value = returnedValue
+	oxxo.Source = returnedSource
+
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"status_code": http.StatusCreated,
+		"body": map[string]interface{}{
+			"value":  oxxo.Value,
+			"source": oxxo.Source,
+		},
+	})
 }
 
-func GenerateCode(email string) (barcode.BarcodeIntCS, string, error) {
-	var uuid string
-	var amount float32
-
-	var err = database.DB.QueryRow("SELECT A.UUID, P.AMOUNT FROM ACCOUNTS A, PAYMENTS P WHERE P.ID_ACCOUNT=A.ID_ACCOUNT AND A.EMAIL=?", &email).Scan(&uuid, &amount)
-
-	if err != nil {
-		return nil, "", err
-	}
-
-	barCode, err := code128.Encode(fmt.Sprintf("%s %v", uuid, amount))
+func GenerateCode(email, plan string) (barcode.BarcodeIntCS, string, error) {
+	barCode, err := code128.Encode(fmt.Sprintf("%s %s", email, plan))
 
 	if err != nil {
 		return nil, "", err
@@ -191,17 +135,47 @@ func CreateNewPngRoute(email string) (string, error) {
 
 	var route = os.Getenv("OUTPUT_ROUTE")
 
-	var uuid string
+	var counters []int
 
-	if err := database.DB.QueryRow("SELECT UUID FROM ACCOUNTS WHERE EMAIL=?", &email).Scan(&uuid); err != nil {
+	rows, err := database.DB.Query("SELECT COUNTER FROM OXXO_CODES WHERE EMAIL=?", &email)
+
+	if err != nil {
 		return "", err
 	}
 
-	file, err := os.Create(fmt.Sprintf("%s/%s.png", route, uuid))
+	defer rows.Close()
+
+	for rows.Next() {
+		var counter int
+
+		if err = rows.Scan(&counter); err != nil {
+			return "", err
+		}
+
+		counters = append(counters, counter)
+	}
+
+	var counter int = GetBigger(counters)
+
+	var name = base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s/%s@%d", route, email, counter)))
+
+	file, err := os.Create(fmt.Sprintf("%s/%s.png", route, name))
 
 	if err != nil {
 		return "", err
 	}
 
 	return file.Name(), nil
+}
+
+func GetBigger(x []int) int {
+	var biggest int = 0
+
+	for _, v := range x {
+		if v > biggest {
+			biggest = v
+		}
+	}
+
+	return biggest
 }

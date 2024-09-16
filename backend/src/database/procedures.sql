@@ -91,3 +91,18 @@ BEGIN
   );
 END //
 DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE InsertOxxoCode(
+  IN p_value VARCHAR(255),
+  IN p_source VARCHAR(255),
+  IN p_email VARCHAR(255),
+  IN p_counter INT
+)
+BEGIN
+  DECLARE last_id INT;
+  INSERT INTO OXXO_CODES(VALUE,SOURCE,EMAIL)VALUES(p_value,p_source,p_email,p_counter);
+  SET last_id=LAST_INSERT_ID();
+  SELECT VALUE, SOURCE FROM OXXO_CODES WHERE ID_OXXO_CODE=last_id;
+END //
+DELIMITER ;

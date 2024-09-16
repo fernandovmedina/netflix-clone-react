@@ -6,23 +6,29 @@ const CashPaymentOption = () => {
   const email = new URLSearchParams(window.location.search).get("email");
   const password = new URLSearchParams(window.location.search).get("password");
   const plan = new URLSearchParams(window.location.search).get("plan");
-  const phoneNumberURL = new URLSearchParams(window.location.search).get(
-    "phoneNumber"
-  );
-  const clientNameURL = new URLSearchParams(window.location.search).get(
-    "clientName"
-  );
+  const phoneNumberURL = new URLSearchParams(window.location.search).get("phoneNumber");
+  const clientNameURL = new URLSearchParams(window.location.search).get("clientName");
 
   useEffect(() => {
-    document.getElementById("chn")!.addEventListener("click", () => {
-      window.location.href = `/signup/paymentPicker?email=${email}&password=${password}&plan=${plan}`;
-    });
+    const generateCode = document.getElementById("generateCode");
+    const chn = document.getElementById("chn");
+    const chk = document.getElementById("chk");
+    const check = document.getElementById("checked");
+    const change = document.getElementById("change");
+    const clientName = document.getElementById("clientName") as HTMLInputElement;
+    const phoneNumber = document.getElementById("phoneNumber") as HTMLInputElement;
 
-    var clientName: string | any = document.getElementById("clientName");
-    var phoneNumber: string | any = document.getElementById("phoneNumber");
+    if (chn) {
+      chn.addEventListener("click", () => {
+        window.location.href = `/signup/paymentPicker?email=${email}&password=${password}&plan=${plan}`;
+      });
+    }
 
-    var chk: any = document.getElementById("chk");
-    var check: any = document.getElementById("checked");
+    if (generateCode) {
+      generateCode.addEventListener('click', () => {
+        window.location.href = `/signup/oxxoCodeGenerator?email=${email}&password=${password}&plan=${plan}`;
+      });
+    }
 
     if (chk && check) {
       chk.addEventListener("click", () => {
@@ -30,7 +36,7 @@ const CashPaymentOption = () => {
       });
     }
 
-    var plans = {
+    const plans = {
       premium: {
         name: "Premium",
         price: "299",
@@ -45,8 +51,8 @@ const CashPaymentOption = () => {
       },
     };
 
-    var planName: any = document.getElementById("planName");
-    var planPrice: any = document.getElementById("planPrice");
+    const planName = document.getElementById("planName");
+    const planPrice = document.getElementById("planPrice");
 
     if (planName && planPrice) {
       if (plan === "premium") {
@@ -61,18 +67,23 @@ const CashPaymentOption = () => {
       }
     }
 
-    var change: any = document.getElementById("change");
-
     if (change) {
       change.addEventListener("click", () => {
-        window.location.href = `/signup/editplanOXXO?email=${email}&password=${password}&plan=${plan}&clientName=${clientName.value}&phoneNumber=${phoneNumber.value}`;
+        window.location.href = `/signup/editplanOXXO?email=${email}&password=${password}&plan=${plan}&clientName=${clientName?.value}&phoneNumber=${phoneNumber?.value}`;
       });
     }
 
+    // Cleanup event listeners on unmount
     return () => {
-      if (change) {
-        change.removeEventListener("click", () => {
-          window.location.href = `/signup/editplanOXXO?email=${email}&password=${password}&plan=${plan}`;
+      if (chn) {
+        chn.removeEventListener("click", () => {
+          window.location.href = `/signup/paymentPicker?email=${email}&password=${password}&plan=${plan}`;
+        });
+      }
+
+      if (generateCode) {
+        generateCode.removeEventListener('click', () => {
+          window.location.href = `/signup/oxxoCodeGenerator?email=${email}&password=${password}&plan=${plan}`;
         });
       }
 
@@ -81,8 +92,14 @@ const CashPaymentOption = () => {
           check.checked = !check.checked;
         });
       }
+
+      if (change) {
+        change.removeEventListener("click", () => {
+          window.location.href = `/signup/editplanOXXO?email=${email}&password=${password}&plan=${plan}`;
+        });
+      }
     };
-  }, []);
+  }, [email, password, plan]);
 
   return (
     <main>
@@ -105,7 +122,9 @@ const CashPaymentOption = () => {
               </a>
             </div>
             <div className="w-1/2 flex justify-end">
-                <a href="/signup/oxxoCodeGenerator" className="items-center text-sm text-blue-500 hover:underline hover:underline-offset-1">Generate Code</a>
+              <a id="generateCode" className="items-center text-sm text-blue-500 hover:underline hover:underline-offset-1">
+                Generate Code
+              </a>
             </div>
           </div>
           <h1 className="font-bold text-4xl mb-6">
@@ -140,11 +159,11 @@ const CashPaymentOption = () => {
               className="border-2 border-gray-600 my-2 w-full px-2 py-3"
             />
             <input
-                type="text"
-                placeholder="Code"
-                id="oxxoCode"
-                required
-                className="border-2 border-gray-600 w-full px-2 py-3"
+              type="text"
+              placeholder="Code"
+              id="oxxoCode"
+              required
+              className="border-2 border-gray-600 w-full px-2 py-3"
             />
             <div className="bg-gray-200 p-3 flex my-2 rounded">
               <div className="w-1/2">
