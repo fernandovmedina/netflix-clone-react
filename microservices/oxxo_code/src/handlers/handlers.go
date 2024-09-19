@@ -1,12 +1,14 @@
 package handlers
 
 import (
+	"database/sql"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"image/png"
 	"net/http"
 	"os"
+	"path/filepath"
 
 	"github.com/boombuler/barcode"
 	"github.com/boombuler/barcode/code128"
@@ -17,14 +19,54 @@ import (
 
 func OxxoCode(w http.ResponseWriter, r *http.Request) {
 	var email = r.URL.Query().Get("email")
+	var plan = r.URL.Query().Get("plan")
 
-	barCode, value, err := GenerateCode(email, r.URL.Query().Get("plan"))
+	if email == "" || plan == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]any{
+			"status_code": http.StatusBadRequest,
+			"body": map[string]any{
+				"error": "email and plan are required",
+			},
+		})
+		return
+	}
+
+	barCode, value, err := GenerateCode(email, plan)
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]interface{}{
+		json.NewEncoder(w).Encode(map[string]any{
 			"status_code": http.StatusInternalServerError,
-			"body": map[string]interface{}{
+			"body": map[string]any{
+				"error": err.Error(),
+			},
+		})
+		return
+	}
+
+	counter, err := GetLastCounter(email)
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]any{
+			"status_code": http.StatusInternalServerError,
+			"body": map[string]any{
+				"error": err.Error(),
+			},
+		})
+		return
+	}
+
+	counter++
+
+	route, err := CreateNewPngRoute(email, counter)
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]any{
+			"status_code": http.StatusInternalServerError,
+			"body": map[string]any{
 				"error": err.Error(),
 			},
 		})
@@ -35,22 +77,9 @@ func OxxoCode(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]interface{}{
+		json.NewEncoder(w).Encode(map[string]any{
 			"status_code": http.StatusInternalServerError,
-			"body": map[string]interface{}{
-				"error": err.Error(),
-			},
-		})
-		return
-	}
-
-	route, err := CreateNewPngRoute(email)
-
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]interface{}{
-			"status_code": http.StatusInternalServerError,
-			"body": map[string]interface{}{
+			"body": map[string]any{
 				"error": err.Error(),
 			},
 		})
@@ -61,9 +90,9 @@ func OxxoCode(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]interface{}{
+		json.NewEncoder(w).Encode(map[string]any{
 			"status_code": http.StatusInternalServerError,
-			"body": map[string]interface{}{
+			"body": map[string]any{
 				"error": err.Error(),
 			},
 		})
@@ -74,46 +103,33 @@ func OxxoCode(w http.ResponseWriter, r *http.Request) {
 
 	if err = png.Encode(output, img); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]interface{}{
+		json.NewEncoder(w).Encode(map[string]any{
 			"status_code": http.StatusInternalServerError,
-			"body": map[string]interface{}{
+			"body": map[string]any{
 				"error": err.Error(),
 			},
 		})
 		return
 	}
 
-	type OxxoCode struct {
-		Value  string `json:"value"`
-		Source string `json:"source"`
-	}
-
-	var oxxo OxxoCode
-
-	var returnedValue string
-	var returnedSource string
-
-	err = database.DB.QueryRow("CALL InsertOxxoCode(?,?)", &value, &route).Scan(&returnedValue, &returnedSource)
+	_, returnedSource, err := InsertOxxoCode(value, route, email, counter)
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]interface{}{
+		json.NewEncoder(w).Encode(map[string]any{
 			"status_code": http.StatusInternalServerError,
-			"body": map[string]interface{}{
+			"body": map[string]any{
 				"error": err.Error(),
 			},
 		})
 		return
 	}
-
-	oxxo.Value = returnedValue
-	oxxo.Source = returnedSource
 
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"status_code": http.StatusCreated,
 		"body": map[string]interface{}{
-			"value":  oxxo.Value,
-			"source": oxxo.Source,
+			"value":  value,
+			"source": returnedSource,
 		},
 	})
 }
@@ -128,54 +144,48 @@ func GenerateCode(email, plan string) (barcode.BarcodeIntCS, string, error) {
 	return barCode, barCode.Content(), nil
 }
 
-func CreateNewPngRoute(email string) (string, error) {
+func GetLastCounter(email string) (int, error) {
+	var counter sql.NullInt16
+
+	var err = database.DB.QueryRow("SELECT MAX(COUNTER) FROM OXXO_CODES WHERE EMAIL=?", email).Scan(&counter)
+
+	if err != nil && err != sql.ErrNoRows {
+		return 0, err
+	}
+
+	if counter.Valid {
+		return int(counter.Int16), nil
+	}
+
+	return 0, nil
+}
+
+func CreateNewPngRoute(email string, counter int) (string, error) {
 	if err := godotenv.Load(); err != nil {
 		return "", err
 	}
 
 	var route = os.Getenv("OUTPUT_ROUTE")
 
-	var counters []int
-
-	rows, err := database.DB.Query("SELECT COUNTER FROM OXXO_CODES WHERE EMAIL=?", &email)
-
-	if err != nil {
-		return "", err
+	if route == "" {
+		route = "output"
 	}
 
-	defer rows.Close()
+	name := base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s@%d", email, counter)))
 
-	for rows.Next() {
-		var counter int
+	path := filepath.Join(route, fmt.Sprintf("%s.png", name))
 
-		if err = rows.Scan(&counter); err != nil {
-			return "", err
-		}
-
-		counters = append(counters, counter)
-	}
-
-	var counter int = GetBigger(counters)
-
-	var name = base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s/%s@%d", route, email, counter)))
-
-	file, err := os.Create(fmt.Sprintf("%s/%s.png", route, name))
-
-	if err != nil {
-		return "", err
-	}
-
-	return file.Name(), nil
+	return path, nil
 }
 
-func GetBigger(x []int) int {
-	var biggest int = 0
+func InsertOxxoCode(value, source, email string, counter int) (string, string, error) {
+	var returnedValue, returnedSource string
 
-	for _, v := range x {
-		if v > biggest {
-			biggest = v
-		}
+	var err = database.DB.QueryRow("CALL InsertOxxoCode(?,?,?,?)", value, source, email, counter).Scan(&returnedValue, &returnedSource)
+
+	if err != nil {
+		return "", "", err
 	}
 
-	return biggest
+	return returnedValue, returnedSource, nil
 }
