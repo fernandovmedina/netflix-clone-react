@@ -19,7 +19,7 @@ func main() {
 
 	var mux = http.NewServeMux()
 
-	mux.HandleFunc("GET /microservice/oxxo_code", handlers.OxxoCode)
+	mux.HandleFunc("GET /microservice/oxxo_code", handlers.OXXO)
 
 	var handler = handlers.CORS(mux)
 
