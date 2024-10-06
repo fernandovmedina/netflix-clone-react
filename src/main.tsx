@@ -23,11 +23,16 @@ import Registration from './pages/signup/registration.tsx'
 import VerifyEmail from './pages/signup/verifyemail.tsx'
 import GenerateGiftCode from './pages/signup/generateGiftCode.tsx'
 import OxxoCodeGenerator from './pages/signup/oxxoCodeGenerator.tsx'
+import Home from "./pages/home.tsx"
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />, // verify accordion
+  },
+  {
+    path: "/home",
+    element: <Home />
   },
   {
     path: "/signup/oxxoCodeGenerator",
