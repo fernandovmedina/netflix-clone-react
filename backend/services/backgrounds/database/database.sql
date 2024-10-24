@@ -1,8 +1,12 @@
 -- date:   October 17, 21:36 (UTC-5)
 -- author: Fernando Vazquez
 
+--- QUERYS TO CREATE THE BACKGROUNDS TABLES IN NETFLIX_CLONE'S DATABASE
+
 DROP DATABASE IF EXISTS NETFLIX_CLONE;
 CREATE DATABASE IF NOT EXISTS NETFLIX_CLONE;
+
+USE NETFLIX_CLONE;
 
 DROP TABLE IF EXISTS ACTORS;
 CREATE TABLE IF NOT EXISTS ACTORS (
@@ -20,8 +24,8 @@ CREATE TABLE IF NOT EXISTS DIRECTORS (
 
 DROP TABLE IF EXISTS CATEGORIES;
 CREATE TABLE IF NOT EXISTS CATEGORIES (
-    ID_CATEGORIE INT AUTO_INCREMENT NOT NULL,
-    CONSTRAINT PK_CATEGORIES PRIMARY KEY (ID_CATEGORIE),
+    ID_CATEGORY INT AUTO_INCREMENT NOT NULL,
+    CONSTRAINT PK_CATEGORIES PRIMARY KEY (ID_CATEGORY),
     NAME TEXT NULL
 );
 
@@ -45,7 +49,7 @@ CREATE TABLE IF NOT EXISTS MOVIES_has_ACTORS (
     ID_MHA INT AUTO_INCREMENT NOT NULL,
     CONSTRAINT PK_MHA PRIMARY KEY (ID_MHA),
     ID_MOVIE INT NOT NULL,
-    CONSTRAINT FK_MOVIES_has_ACTORS_TO_ACTORS FOREIGN KEY (ID_MOVIE) REFERENCES MOVIES (ID_MOVIE),
+    CONSTRAINT FK_MOVIES_has_ACTORS_TO_MOVIES FOREIGN KEY (ID_MOVIE) REFERENCES MOVIES (ID_MOVIE),
     ID_ACTOR INT NOT NULL,
     CONSTRAINT FK_MOVIES_has_ACTORS_TO_ACTORS FOREIGN KEY (ID_ACTOR) REFERENCES ACTORS (ID_ACTOR)
 );
@@ -113,3 +117,20 @@ CREATE TABLE IF NOT EXISTS SERIES_has_CATEGORIES (
     ID_CATEGORY INT NOT NULL,
     CONSTRAINT FK_SERIES_has_CATEGORIES_TO_CATEGORIES FOREIGN KEY (ID_CATEGORY) REFERENCES CATEGORIES (ID_CATEGORY)
 );
+
+--- INSERTS DEFAULT DATA
+INSERT INTO CATEGORIES(NAME)VALUES("terror"),("suspense"),("comedy"),("romantic"),("bloody"),("laughter"),("action"),("intelligence"),("violent"),("sex"),("technology");
+
+-- El Padrino
+INSERT INTO MOVIES(ID_MOVIE,NAME,CREATED_AT,BACKGROUND_URL,DURATION,YEAR_RELEASED,DESCRIPTION,VIDEO_URL)VALUES(1,"El Padrino",'2024-10-23 23:12',"/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/public/backgrounds/movies/AAAABaXG0_SkcxDP4NKIZuZM0A2jqVxn47Vij18mNPP1dVd5INlsGHtKKNeCVdZw8H--Lzpy57hlWE_MgG07ZN1gPjRzavFLIdN5s1A.webp","2h 56min",1972,"In the family's hell of the New York mafia, an obedient son gets the power between a lot of thiefs. With Marlon Brando and Al Pacino.","/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/public/backgrounds/default_video.mp4");
+INSERT INTO ACTORS(ID_ACTOR,NAME)VALUES(1,"Marlon Brando"),(2,"Al Pacino"),(3,"James Caan"),(4,"Richard Castellano"),(5,"Robert Duvall"),(6,"Sterling Hayden"),(7,"John Marley"),(8,"Richard Conte"),(9,"Al Lettieri"),(10,"Diane Katon"),(11,"Abe Vigoda"),(12,"Talia Shire"),(13,"Gianni Russo"),(14,"John Cazale");
+INSERT INTO DIRECTORS(ID_DIRECTOR,NAME)VALUES(1,"Francis Ford Coppola");
+INSERT INTO MOVIES_has_ACTORS(ID_MOVIE,ID_ACTOR)VALUES(1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,8),(1,9),(1,10),(1,11),(1,12),(1,13),(1,14);
+INSERT INTO MOVIES_has_DIRECTORS(ID_MOVIE,ID_DIRECTOR)VALUES(1,1);
+
+-- Social Network
+INSERT INTO MOVIES(ID_MOVIE,NAME,CREATED_AT,BACKGROUND_URL,DURATION,YEAR_RELEASED,DESCRIPTION,VIDEO_URL)VALUES(2,"Social Network",'2024-10-23 23:30',"/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/public/backgrounds/movies/AAAABXg0mjvJSN54stL5DWKiy_yUCS47uNGjhHTOnrefCBg_cZzCJQiO-7s8ks3WEwTK5VM5l6T0eTjXKc4OD45cYjd-v-DZig-Ze2g.webp","2h",2010,"The Harvard student Mark Zuckerberg executes an idea that will give him success on the internet, but it will also create him legal troubles and brake him relationships","/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/public/backgrounds/default_video.mp4");
+INSERT INTO ACTORS(ID_ACTOR,NAME)VALUES(15,"Jesse Eisenberg"),(16,"Andrew Garfiel"),(17,"Justin Timberlake"),(18,"Armie Hammer"),(19,"Max Minghella"),(20,"Josh Pence"),(21,"Brenda Song"),(22,"Rashida Jones"),(23,"John Getz"),(24,"David Selby");
+INSERT INTO DIRECTORS(ID_DIRECTOR,NAME)VALUES(2,"David Fincher");
+INSERT INTO MOVIES_has_ACTORS(ID_MOVIE,ID_ACTOR)VALUES(2,15),(2,16),(2,17),(2,18),(2,19),(2,20),(2,21),(2,22),(2,23),(2,24);
+INSERT INTO MOVIES_has_DIRECTORS(ID_MOVIE,ID_DIRECTOR)VALUES(2,2);

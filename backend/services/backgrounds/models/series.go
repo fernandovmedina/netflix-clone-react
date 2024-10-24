@@ -18,3 +18,21 @@ type Serie struct {
 }
 
 type Series []Serie
+
+type Season struct {
+	Number   uint8    `bson:"number" json:"number"`
+	Chapters Chapters `bson:"chapters" json:"chapters"`
+}
+
+type Seasons []Season
+
+type Chapter struct {
+	Number        uint8  `bson:"number" json:"number"`
+	Name          string `bson:"name" json:"name"`
+	Duration      string `bson:"duration" json:"duration"`
+	Description   string `bson:"description" json:"description"`
+	BackgroundURL string `bson:"background_url" json:"background_url"`
+	VideoURL      string `bson:"video_url" json:"video_url"`
+}
+
+type Chapters []Chapter
