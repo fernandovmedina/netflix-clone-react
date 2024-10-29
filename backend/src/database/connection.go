@@ -1,24 +1,18 @@
 package database
 
-/*
-	-- date:   October 21, 23:13 (UTC-5)
-	-- author: Fernando Vazquez
-*/
-
 import (
 	"database/sql"
 	"fmt"
 	"os"
 
-	"github.com/joho/godotenv"
-
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/joho/godotenv"
 )
 
 var DB *sql.DB
 
-// Function to connect the background's service with the mysql database
-func ConnDB() (*sql.DB, error) {
+// Function to connect to mysql database
+func ConnMYSQL() (*sql.DB, error) {
 	var err error
 
 	if err = godotenv.Load(".env"); err != nil {
@@ -26,16 +20,16 @@ func ConnDB() (*sql.DB, error) {
 	}
 
 	var (
-		databaseName string = os.Getenv("DATABASE_NAME")
-		databasePass string = os.Getenv("DATABASE_PASS")
 		databaseUser string = os.Getenv("DATABASE_USER")
+		databasePass string = os.Getenv("DATABASE_PASS")
+		databaseName string = os.Getenv("DATABASE_NAME")
 		databaseHost string = os.Getenv("DATABASE_HOST")
 		databasePort string = os.Getenv("DATABASE_PORT")
 	)
 
-	var DSN = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", databaseUser, databasePass, databaseHost, databasePort, databaseName)
+	var dsn = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", databaseUser, databasePass, databaseHost, databasePort, databaseName)
 
-	if DB, err = sql.Open("mysql", DSN); err != nil {
+	if DB, err = sql.Open("mysql", dsn); err != nil {
 		return nil, err
 	} else {
 		if err = DB.Ping(); err != nil {
