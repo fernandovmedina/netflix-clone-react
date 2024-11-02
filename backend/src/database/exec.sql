@@ -97,5 +97,54 @@ INSERT INTO CHAPTERS(ID_CHAPTER,ID_SEASON,NAME,BACKGROUND_URL,DURATION,DESCRIPTI
     (27,3,"Josh contra el apocalipsis: Parte 2",@DEFAULT_NINE,"49 min","Josh and Eli come back to the school for diferent reasons"),
     (28,3,"CATAPLUUUUMMMMM!",@DEFAULT_TEN,"49 min","Will they beat the Principal Burr?");
 --- /* BREAKING BAD */
+INSERT INTO ACTORS(ID_ACTOR,NAME)VALUES(22,"Bryan Cranston"),(23,"Aaron Paul"),(24,"Anna Gunn");
+INSERT INTO CATEGORIES(ID_CATEGORY,NAME)VALUES(17,"Dramatic series"),(18,"Series about crimes"),(19,"Usa series");
+INSERT INTO DIRECTORS(ID_DIRECTOR,NAME)VALUES(10,"Vince Gilligan");
+INSERT INTO SERIES(ID_SERIE,NAME,NUMBER_OF_SEASONS,BACKGROUND_URL,YEAR_RELEASED,DESCRIPTION)VALUES(3,"Breaking Bad",2,"/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/public/backgrounds/series/breaking-bad/AAAABafEkwgV-ddaqb-IzfVJPCI7Kc4kSddq7NjUsnrOePu5t6IicZvd_lkxEjYiQkQ2sIpsVBC7Gk653tPkWAy9X9ef9dg3q7LDLpg.webp",2013,"A highschool chemical professor starts selling drugs to keep his family up");
+INSERT INTO SERIES_has_ACTORS(ID_SERIE,ID_ACTOR)VALUES(3,22),(3,23),(3,24);
+INSERT INTO SERIES_has_CATEGORIES(ID_SERIE,ID_CATEGORY)VALUES(3,17),(3,18),(3,19);
+INSERT INTO SERIES_has_DIRECTORS(ID_SERIE,ID_DIRECTOR)VALUES(3,10);
+INSERT INTO SEASONS(ID_SEASON,ID_SERIE,NUMBER_OF_SEASON)VALUES(4,3,1),(5,3,2);
+INSERT INTO CHAPTERS(ID_CHAPTER,ID_SEASON,NAME,BACKGROUND_URL,DURATION,DESCRIPTION)VALUES
+    (29,4,"Principio del fin",@DEFAULT_ONE,"58 min","A highschool chemical profesor starts selling drugs to keep his family up."),(30,4,"El gato en la bolsa",@DEFAULT_TWO,"48 min","After failure of their first grugs bussiness, Walt and Jesse must deseaper two bodies."),(31,4,"Y la bolsa en el rio",@DEFAULT_THREE,"48 min","While Walt cleans the disaster of their first bussiness, Walt thinks on saying Skyler everything he is doing."),(32,4,"Cancer",@DEFAULT_FOUR,"48 min","On being forced on telling the truth to his family, Walt fronts the problem of cancer with his family"),(33,4,"Materia gris",@DEFAULT_FIVE,"48 min","Skylar organices an intervention to convince Walter to accept his job expartner about the cancer treatment."),(34,4,"Un loco punado de nada",@DEFAULT_SIX,"48 min","The secondary effects and treatment cost grow up, Walt tells to Jesse they nedd to find the main supplier of the town"),(35,4,"Acuerdo no violento",@DEFAULT_SEVEN,"47 min","After jesse being about to die, Walt accepts to presents Tuco their drugs, while Skylar suspects that her sister stole a diamond necklace."),
+    (36,5,"Siete con treinta y siete",@DEFAULT_ONE,"47 min","When they prepare new plans for their final bussiness drugs, Walt and Jesse start to get worried about Tuco killing them"),(37,5,"A las brasas",@DEFAULT_TWO,"48 min","While the DEA starts looking for Tuco, Skyler goes to Hank for him to help her go and find Walt"),(38,5,"Picadura de una abje muerta",@DEFAULT_THREE,"47 min","Walt tries to get back Skyler, and Jesse has no home after his parents took him out"),(39,5,"Abajo",@DEFAULT_FOUR,"47 min","Walt fights for trying to save his relationship with Skyler");
 --- /* PABLO ESCOBAR */
+INSERT INTO ACTORS(ID_ACTOR,NAME)VALUES(25,"Andres Parra"),(26,"Cecilia Nava");
+INSERT INTO CATEGORIES(ID_CATEGORY,NAME)VALUES(20,"Dramatic series"),(21,"Telenovels about crime"),(22,"From Colombia");
+INSERT INTO DIRECTORS(ID_DIRECTOR,NAME)VALUES(11,"Juana Uribe"),(12,"Camilo Cano");
+INSERT INTO SERIES(ID_SERIE,NAME,NUMBER_OF_SEASONS,BACKGROUND_URL,YEAR_RELEASED,DESCRIPTION)VALUES(4,"Pablo Escobar",1,"/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/backgrounds/series/pablo-escobar/AAAABQl4yXkB-DAKmy6mco3vS49Bz_B2p5cuFImUgxQCqEu14KTB9fkwvnho4oeqVbC_s7ZkF4McGFVeRVDPn50EtTcFxZIcrOblN2U.webp",2012,"Pablo demonstrated his skills for bussiness since he was a child. As an adult, he works for a man who introduces him to narcotrafic");
+INSERT INTO SERIES_has_ACTORS(ID_SERIE,ID_ACTOR)VALUES(4,25),(4,26);
+INSERT INTO SERIES_has_CATEGORIES(ID_SERIE,ID_CATEGORY)VALUES(4,20),(4,21),(4,22);
+INSERT INTO SERIES_has_DIRECTORS(ID_SERIE,ID_DIRECTOR)VALUES(4,11),(4,12);
+INSERT INTO SEASONS(ID_SEASON,ID_SERIE,NUMBER_OF_SEASON)VALUES(6,4,1);
+INSERT INTO CHAPTERS(ID_CHAPTER,ID_SEASON,NAME,BACKGROUND_URL,DURATION,DESCRIPTION)VALUES
+    (40,6,"Episode 1",@DEFAULT_ONE,"45 min","Pablo showed his skill for bussiness since he was a child"),
+    (41,6,"Episode 2",@DEFAULT_TWO,"44 min","A pablos's neighboor watches a bank rob and recognizez the thieves"),
+    (42,6,"Episode 3",@DEFAULT_THREE,"43 min","Pablo and Gonzalo are in jail for drug dealing. Fabio is forced to accept the relationship between his sister and Pablo"),
+    (43,6,"Episode 4",@DEFAULT_FOUR,"45 min","With the planes he bought, Pablo send drugs to miami"),
+    (44,6,"Episode 5",@DEFAULT_FIVE,"44 min","Pablo build the Napoles building while he realizes about the extradiction paper on Colombia"),
+    (45,6,"Episode 6",@DEFAULT_SIX,"44 min","The operatives to find Irma are not going as expected"),
+    (46,6,"Episode 7",@DEFAULT_SEVEN,"42 min","Pablo realizes about the political strength on his country, and contemplates to get into it"),
+    (47,6,"Episode 8",@DEFAULT_EIGHT,"43 min","Pablo starts his campaign, but some of his partners disagree with him"),
+    (48,6,"Episode 9",@DEFAULT_NINE,"44 min","The elections start and Pablo and Galan wait for the results, but Pablo is thinking on his next step"),
+    (49,6,"Episode 10",@DEFAULT_TEN,"45 min","Pablo takes his charge. Rodrigo Lara is the new justice minister and uses his job to declare a war against drug dealing");
 --- /* STRANGER THINGS */
+INSERT INTO ACTORS(ID_ACTOR,NAME)VALUES(27,"Winona Ryder"),(28,"David Harbour"),(29,"Millie Bobby Brown");
+INSERT INTO CATEGORIES(ID_CATEGORY,NAME)VALUES(23,"Dramatic series"),(24,"Sci-fi series"),(25,"Teenagers series");
+INSERT INTO DIRECTORS(ID_DIRECTOR,NAME)VALUES(13,"The Duffer Brothers");
+INSERT INTO SERIES(ID_SERIE,NAME,NUMBER_OF_SEASONS,BACKGROUND_URL,YEAR_RELEASED,DESCRIPTION)VALUES(5,"Stranger Things",2,"/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/backgrounds/series/stranger-things/AAAABaJhbUQjS8mk9pa79jI-qjHrCibDw39Wfb2vd4E3gDAfRRy2fnPoNrqTV_6Fd6BEpM1ke1KD1DI0bYjAcRCo5mf8org11n6VkhbkahQqrbNj5sqGnh2J43f61TLqnvtYQkc4.jpg",2022,"Will watches something horrible when he comes back home, Near down there of his house, there is a gobernamental lab.");
+INSERT INTO SERIES_has_ACTORS(ID_SERIE,ID_ACTOR)VALUES(5,27),(5,28),(5,29);
+INSERT INTO SERIES_has_CATEGORIES(ID_SERIE,ID_CATEGORY)VALUES(5,23),(5,24),(5,25);
+INSERT INTO SERIES_has_DIRECTORS(ID_SERIE,ID_DIRECTOR)VALUES(5,13);
+INSERT INTO SEASONS(ID_SEASON,ID_SERIE,NUMBER_OF_SEASON)VALUES(7,5,1),(8,5,2);
+INSERT INTO CHAPTERS(ID_CHAPTER,ID_SEASON,NAME,BACKGROUND_URL,DURATION,DESCRIPTION)VALUES
+    (50,7,"Chapter one",@DEFAULT_ONE,"49 min","Will watches something horrible while he comes back home. Near there, a gobernamental laboratory hides a terrible secret on their deeps."),(51,7,"Chapter one",@DEFAULT_TWO,"56 min","Lucas, Mike and Dustin try to talk about the girl that they found."),(52,7,"Chapter one",@DEFAULT_THREE,"52 min","Nancy, each time more worried, looks for Barb and finds out what Jonathan is trying to do."),(53,7,"Chapter one",@DEFAULT_FOUR,"51 min","Joyce does not accept that Will is dead and tries to communicate with him."),(54,7,"Chapter one",@DEFAULT_FIVE,"53 min","Hopper brokes into the laboratory. Nancy and Jonathan fight against what took Will to another dimension"),(55,7,"Chapter one",@DEFAULT_SIX,"47 min","Jonathan looks for Nancy in the darkness and Steve does the same."),(56,7,"Chapter one",@DEFAULT_SEVEN,"42 min","Eleven tries to get to Willy, and Lucas tells'em about something terrible that's coming"),(57,7,"Chapter one",@DEFAULT_EIGHT,"55 min","Dr. Brenner stops Hoper and Joyce for an interrogatory."),
+    (58,8,"Chapter one",@DEFAULT_ONE,"48 min","About some days of halloween, the guys discover that someone beat their score in some videogame, and Hopper investigates an inusual event on a pumpkin patch."),
+    (59,8,"Chapter two",@DEFAULT_TWO,"56 min","Will watches something terrible on halloween's night. By the other side Mike does not lose hpe about eleven being near of them."),
+    (60,8,"Chapter three",@DEFAULT_THREE,"51 min","Dustin get a new weird pet. Eleven gets desesperate with her situation, and Bob talks with Will about facing his fears"),
+    (61,8,"Chapter four",@DEFAULT_FOUR,"46 min","Will's health gets worse and Joyce realizes about how big the problem is"),
+    (62,8,"Chapter five",@DEFAULT_FIVE,"58 min","Nancy and Jonathan get a new partner who has his own theory about this."),
+    (63,8,"Chapter six",@DEFAULT_SIX,"52 min","The bond between Will and the monster intensifies while everyone aks themselves how to stop it"),
+    (64,8,"Chapter seven",@DEFAULT_SEVEN,"46 min","After a lot of vitions, Eleven leaves the town"),
+    (65,8,"Chapter eight",@DEFAULT_EIGHT,"48 min","The situation on the laboratory activates a security protocol where nobody can scape of it."),
+    (66,8,"Chapter nine",@DEFAULT_NINE,"62 min","Eleven knows the solution is on her hands and must finish what she started");
