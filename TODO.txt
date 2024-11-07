@@ -1,0 +1,1 @@
+* Delete phone number input on oxxo payment [DONE]

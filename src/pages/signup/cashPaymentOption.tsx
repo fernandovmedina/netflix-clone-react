@@ -138,18 +138,6 @@ const CashPaymentOption = () => {
             for important account messages. SMS rates may apply.
           </h4>
           <form action="" method="post" className="my-6">
-            <div className="flex items-center border-2 border-gray-600 p-2">
-              <img src="/mexico.png" alt="mexico_flag_image" className="w-8" />
-              <h5 className="mx-2">+52</h5>
-              <input
-                type="tel"
-                placeholder="Phone number"
-                id="phoneNumber"
-                value={phoneNumberURL}
-                className="w-full"
-                required
-              />
-            </div>
             <input
               type="text"
               placeholder="Name"
