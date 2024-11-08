@@ -43,7 +43,7 @@ func ConnMongoDB() (*mongo.Client, error) {
 		return nil, fmt.Errorf("couldn't ping MongoDB: %s", err.Error())
 	}
 
-	fmt.Printf("Successfully connected to MongoDB: %s\n", client.Database("netflix_clone").Name())
+	fmt.Println("Successfully connected to MongoDB")
 
 	return client, nil
 }

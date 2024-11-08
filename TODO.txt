@@ -1,1 +1,2 @@
 * Delete phone number input on oxxo payment [DONE]
+* Add auto_renew button on payment 
