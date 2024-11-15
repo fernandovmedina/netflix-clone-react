@@ -1,0 +1,58 @@
+{
+    "login_request": {
+        "email": "fernandovmedina.dev@gmail.com",
+        "password": "VAMedina_062004f"
+    },
+
+    "register_request": {
+        "email": "fernandovmedina.dev@gmail.com",
+        "hashed_password": "8524521cfe1b095d1ad9e506d28afa451f9e23cf2f32a0229d80e1be5afa6703",
+        "plan_details": {
+            "type": "premium",
+            "device_limit": 4,
+            "resolution": "4K"
+        },
+        "users": [
+            {
+                "name": "Fernando",
+                "user_type": "adult",
+                "icon": "default_icon.png"
+            },
+            {
+                "name": "Mariajose",
+                "user_type": "kids",
+                "icon": "default_icon.png"
+            }
+        ],
+        "payment": [
+            {
+                "card": {
+                    "card_number": "4152314051132366",
+                    "due_date": "03/26",
+                    "cvv": 911,
+                    "card_name": "Fernando Alejandro Vazquez Medina"
+                }
+            },
+            {
+                "oxxo": {
+                    "oxxo_name": null,
+                    "code": null
+                }
+            },
+            {
+                "gift": {
+                    "gift_code": null
+                }
+            }
+        ],
+        "initial_date": "2024-11-07",
+        "expires_date": "2024-12-07",
+        "amount": 249.99,
+        "status": true,
+        "auto_renew": false
+    },
+
+    "user_request": {
+        "_id": "672cd5a8db8edc46e8fe6911"
+    }
+}

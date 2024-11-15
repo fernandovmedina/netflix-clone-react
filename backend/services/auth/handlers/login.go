@@ -35,7 +35,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		hashed_password string `bson:"hashed_password"`
 	}
 
-	if err := database.DB.Collection("netflix_clone").FindOne(context.Background(), filter).Decode(&result); err != nil {
+	if err := database.DB.Collection("users").FindOne(context.Background(), filter).Decode(&result); err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode(map[string]interface{}{
 			"status_code": http.StatusNotFound,

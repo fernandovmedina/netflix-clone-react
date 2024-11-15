@@ -3,12 +3,14 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/fernandovmedina/netflix-clone-react/backend/services/auth/database"
@@ -28,7 +30,34 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var currentDate = GetFormattedDate()
+	var filter = bson.M{
+		"email": RegisterRequest.Email,
+	}
+
+	var resultQuery struct{ _id string }
+
+	err := database.DB.Collection("users").FindOne(context.Background(), filter).Decode(&resultQuery)
+	if err != nil && !errors.Is(err, mongo.ErrNoDocuments) {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"status_code": http.StatusInternalServerError,
+			"error":       err.Error(),
+			"body":        nil,
+		})
+		return
+	}
+
+	if err == nil {
+		w.WriteHeader(http.StatusConflict)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"status_code": http.StatusConflict,
+			"message":     "user already exists",
+			"body":        nil,
+		})
+		return
+	}
+
+	log.Printf("Decoded RegisterRequest: %+v\n", RegisterRequest)
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(RegisterRequest.HashedPassword), bcrypt.DefaultCost)
 
@@ -41,6 +70,8 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
+	var currentDate = GetFormattedDate()
+	var expiresDate = AddDays(currentDate, 30)
 
 	var document = bson.D{
 		{Key: "email", Value: RegisterRequest.Email},
@@ -51,16 +82,9 @@ func Register(w http.ResponseWriter, r *http.Request) {
 			{Key: "resolution", Value: RegisterRequest.Plan.Resolution},
 		}},
 		{Key: "users", Value: GetUsers(*RegisterRequest)},
-		{Key: "payment", Value: bson.D{
-			{Key: "card", Value: bson.D{
-				{Key: "card_number", Value: RegisterRequest.Payment.CARD.Number},
-				{Key: "due_date", Value: RegisterRequest.Payment.CARD.DueDate},
-				{Key: "cvv", Value: RegisterRequest.Payment.CARD.CVV},
-				{Key: "card_name", Value: RegisterRequest.Payment.CARD.Name},
-			}},
-		}},
+		{Key: "payment", Value: GetPayments(RegisterRequest.Payments)},
 		{Key: "initial_date", Value: currentDate},
-		{Key: "expires_date", Value: AddDays(currentDate, 30)},
+		{Key: "expires_date", Value: expiresDate},
 		{Key: "amount", Value: RegisterRequest.Amount},
 		{Key: "status", Value: true},
 		{Key: "auto_renew", Value: false},
@@ -80,6 +104,8 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	var insertedID = result.InsertedID
 
+	log.Println(insertedID)
+
 	http.SetCookie(w, &http.Cookie{
 		Name:     "auth",
 		Value:    fmt.Sprintf("%v", insertedID),
@@ -98,16 +124,14 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 // Function to get all the users from the request
 func GetUsers(u models.RegisterRequest) interface{} {
-	var users = bson.D{}
+	var users []bson.D
 
 	for _, v := range u.Users {
-		var user = bson.D{
+		users = append(users, bson.D{
 			{Key: "name", Value: v.Name},
 			{Key: "user_type", Value: v.UserType},
 			{Key: "icon", Value: v.Icon},
-		}
-
-		users = append(users, user...)
+		})
 	}
 
 	return users
@@ -118,15 +142,41 @@ func GetFormattedDate() string {
 	return time.Now().Format("2006-01-02")
 }
 
-/*
-Function to add the days based on the user preference it is going to be
-*/
+// Function to add the days based on the user preference
 func AddDays(dateSTR string, days int) string {
 	date, err := time.Parse("2006-01-02", dateSTR)
-
 	if err != nil {
 		log.Printf("Error on ./handlers/register.go: %v\n", err.Error())
+		return ""
 	}
 
-	return date.AddDate(0, 0, days).Format("2004-12-30")
+	return date.AddDate(0, 0, days).Format("2006-01-02")
+}
+
+func GetPayments(payments []models.Payment) interface{} {
+	var paymentArray []bson.D
+
+	for _, payment := range payments {
+		if payment.Card != nil {
+			paymentArray = append(paymentArray, bson.D{
+				{Key: "card_number", Value: payment.Card.Number},
+				{Key: "due_date", Value: payment.Card.DueDate},
+				{Key: "cvv", Value: payment.Card.CVV},
+				{Key: "card_name", Value: payment.Card.Name},
+			})
+		}
+		if payment.Oxxo != nil {
+			paymentArray = append(paymentArray, bson.D{
+				{Key: "oxxo_name", Value: payment.Oxxo.Name},
+				{Key: "oxxo_code", Value: payment.Oxxo.Code},
+			})
+		}
+		if payment.Gift != nil {
+			paymentArray = append(paymentArray, bson.D{
+				{Key: "gift_code", Value: payment.Gift.Code},
+			})
+		}
+	}
+
+	return paymentArray
 }

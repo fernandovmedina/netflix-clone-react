@@ -1,5 +1,6 @@
 package models
 
+/*
 type Account struct {
 	Email          string      `bson:"email" json:"email"`
 	HashedPassword string      `bson:"hashed_password" json:"hashed_password"`
@@ -64,3 +65,4 @@ type OxxoPayment struct {
 type GiftCodePayment struct {
 	Code string `bson:"gift_code" json:"gift_code"`
 }
+*/

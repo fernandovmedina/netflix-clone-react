@@ -44,7 +44,7 @@ func main() {
 		MaxHeaderBytes: http.DefaultMaxHeaderBytes,
 	}
 
-	log.Println("Auth service running on http://127.0.0.1:8010/service/auth")
+	log.Println("Auth service running on http://127.0.0.1:8010/service/v1/auth")
 
 	log.Fatal(serviceRouter.ListenAndServe())
 }
