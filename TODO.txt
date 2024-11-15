@@ -1,2 +1,4 @@
 * Delete phone number input on oxxo payment [DONE]
-* Add auto_renew button on payment 
+* Add auto_renew button on payment
+* Add suscription days on plan page
+* Add true to secure field on all cookies when going to production

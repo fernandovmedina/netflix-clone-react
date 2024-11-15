@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    container_name: go-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+    environment:
+      MONGO_URI: mongodb://fernandovmedina:VAMedina_062004f@mongo:27017
+
+  mongo:
+    image: mongo:8.0.3
+    container_name: mongo-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: fernandovmedina
+      MONGO_INITDB_ROOT_PASSWORD: VAMedina_062004f
+      MONGO_INITDB_DATABASE: netflix_clone
+    ports:
+      - "27018:27017"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

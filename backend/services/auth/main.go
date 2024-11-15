@@ -9,6 +9,7 @@ import (
 	"github.com/joho/godotenv"
 
 	"github.com/fernandovmedina/netflix-clone-react/backend/services/auth/database"
+	"github.com/fernandovmedina/netflix-clone-react/backend/services/auth/handlers"
 	"github.com/fernandovmedina/netflix-clone-react/backend/services/auth/middlewares"
 )
 
@@ -29,9 +30,9 @@ func main() {
 
 	var mux = http.NewServeMux()
 
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello from root /"))
-	})
+	mux.HandleFunc("POST /service/v1/auth/login", handlers.Login)
+	mux.HandleFunc("POST /service/v1/auth/register", handlers.Register)
+	mux.HandleFunc("GET /service/v1/auth/logout", handlers.Logout)
 
 	var handler = middlewares.CORS(mux)
 

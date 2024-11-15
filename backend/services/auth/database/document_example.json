@@ -14,14 +14,7 @@
             "history": [
                 {
                     "movies_history": [
-                        {
-                            "id_movie": 1,
-                            "last_minute_watched": "43:21"
-                        },
-                        {
-                            "id_movie": 3,
-                            "last_minute_watched": "11:28"
-                        }
+                        {"id_movie": 1,"last_minute_watched": "43:21"},{"id_movie": 3, "last_minute_watched": "11:28"}
                     ]
                 },
                 {

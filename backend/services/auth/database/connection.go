@@ -11,6 +11,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+var DB *mongo.Database
+
 func ConnMongoDB() (*mongo.Client, error) {
 	var err error
 
@@ -44,6 +46,8 @@ func ConnMongoDB() (*mongo.Client, error) {
 	}
 
 	fmt.Println("Successfully connected to MongoDB")
+
+	DB = client.Database("netflix_clone", nil)
 
 	return client, nil
 }

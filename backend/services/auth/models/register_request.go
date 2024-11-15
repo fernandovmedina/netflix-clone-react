@@ -1,16 +1,16 @@
 package models
 
 type RegisterRequest struct {
-	Email          string      `bson:"email" json:"email"`
-	HashedPassword string      `bson:"hashed_password" json:"hashed_password"`
-	Plan           PlanDetails `bson:"plan" json:"plan"`
-	Users          []User      `bson:"users" json:"users"`
-	Payment        Payment     `bson:"payment" json:"payment"`
-	InitialDate    string      `bson:"initial_date" json:"initial_date"`
-	ExpiresDate    string      `bson:"expires_date" json:"expires_date"`
-	Amount         float32     `bson:"amount" json:"amount"`
-	Status         bool        `bson:"status" json:"status"`
-	AutoRenew      bool        `bson:"auto_renew" json:"auto_renew"`
+	Email          string         `bson:"email" json:"email"`
+	HashedPassword string         `bson:"hashed_password" json:"hashed_password"`
+	Plan           PlanDetails    `bson:"plan_details" json:"plan_details"`
+	Users          []User         `bson:"users" json:"users"`
+	Payment        PaymentRequest `bson:"payment" json:"payment"`
+	InitialDate    string         `bson:"initial_date" json:"initial_date"`
+	ExpiresDate    string         `bson:"expires_date" json:"expires_date"`
+	Amount         float32        `bson:"amount" json:"amount"`
+	Status         bool           `bson:"status" json:"status"`
+	AutoRenew      bool           `bson:"auto_renew" json:"auto_renew"`
 }
 
 type PlanDetailsRequest struct {
