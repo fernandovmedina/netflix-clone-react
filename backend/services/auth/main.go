@@ -33,6 +33,7 @@ func main() {
 	mux.HandleFunc("POST /service/v1/auth/login", handlers.Login)
 	mux.HandleFunc("POST /service/v1/auth/register", handlers.Register)
 	mux.HandleFunc("GET /service/v1/auth/logout", handlers.Logout)
+	mux.HandleFunc("GET /service/v1/auth/user", handlers.User)
 
 	var handler = middlewares.CORS(mux)
 

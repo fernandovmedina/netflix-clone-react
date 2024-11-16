@@ -1,12 +1,12 @@
 {
     "login_request": {
-        "email": "fernandovmedina.dev@gmail.com",
-        "password": "VAMedina_062004f"
+        "email": "email@email.com",
+        "password": "password"
     },
 
     "register_request": {
-        "email": "fernandovmedina.dev@gmail.com",
-        "hashed_password": "8524521cfe1b095d1ad9e506d28afa451f9e23cf2f32a0229d80e1be5afa6703",
+        "email": "email@email.com",
+        "hashed_password": "password",
         "plan_details": {
             "type": "premium",
             "device_limit": 4,
@@ -45,8 +45,6 @@
                 }
             }
         ],
-        "initial_date": "2024-11-07",
-        "expires_date": "2024-12-07",
         "amount": 249.99,
         "status": true,
         "auto_renew": false

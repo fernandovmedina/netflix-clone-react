@@ -1,20 +1,19 @@
 package models
 
-/*
 type Account struct {
-	Email          string      `bson:"email" json:"email"`
-	HashedPassword string      `bson:"hashed_password" json:"hashed_password"`
-	Plan           PlanDetails `bson:"plan_details" json:"plan_details"`
-	Users          []User      `bson:"users" json:"users"`
-	Payment        Payment     `bson:"payment" json:"payment"`
-	InitialDate    string      `bson:"initial_date" json:"initial_date"`
-	ExpiresDate    string      `bson:"expires_date" json:"expires_date"`
-	Amount         float32     `bson:"amount" json:"amount"`
-	Status         bool        `bson:"status" json:"status"`
-	AutoRenew      bool        `bson:"auto_renew" json:"auto_renew"`
+	Email          string          `bson:"email" json:"email"`
+	HashedPassword string          `bson:"hashed_password" json:"hashed_password"`
+	Plan           UserPlanDetails `bson:"plan_details" json:"plan_details"`
+	Users          []UserInfo      `bson:"users" json:"users"`
+	Payment        Payment         `bson:"payment" json:"payment"`
+	InitialDate    string          `bson:"initial_date" json:"initial_date"`
+	ExpiresDate    string          `bson:"expires_date" json:"expires_date"`
+	Amount         float32         `bson:"amount" json:"amount"`
+	Status         bool            `bson:"status" json:"status"`
+	AutoRenew      bool            `bson:"auto_renew" json:"auto_renew"`
 }
 
-type PlanDetails struct {
+type UserPlanDetails struct {
 	Type        string `bson:"type" json:"type"`
 	DeviceLimit uint8  `bson:"device_limit" json:"device_limit"`
 	Resolution  string `bson:"resolution" json:"resolution"`
@@ -37,17 +36,11 @@ type SerieHistory struct {
 	LastMinuteWatched  string `bson:"last_minute_watched" json:"last_minute_watched"`
 }
 
-type User struct {
+type UserInfo struct {
 	Name     string  `bson:"name" json:"name"`
 	UserType string  `bson:"user_type" json:"user_type"`
 	Icon     string  `bson:"icon" json:"icon"`
 	History  History `bson:"history" json:"history"`
-}
-
-type Payment struct {
-	CARD CardPayment     `bson:"card" json:"card"`
-	OXXO OxxoPayment     `bson:"oxxo" json:"oxxo"`
-	GIFT GiftCodePayment `bson:"gift" json:"gift"`
 }
 
 type CardPayment struct {
@@ -65,4 +58,3 @@ type OxxoPayment struct {
 type GiftCodePayment struct {
 	Code string `bson:"gift_code" json:"gift_code"`
 }
-*/

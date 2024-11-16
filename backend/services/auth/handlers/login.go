@@ -14,60 +14,68 @@ import (
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	var loginRequest = new(models.LoginRequest)
+	if r.Method == http.MethodPost {
+		var loginRequest = new(models.LoginRequest)
 
-	if err := json.NewDecoder(r.Body).Decode(loginRequest); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		if err := json.NewDecoder(r.Body).Decode(loginRequest); err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"status_code": http.StatusBadRequest,
+				"error":       "Invalid request payload",
+				"body":        nil,
+			})
+			return
+		}
+
+		var filter = bson.M{"email": loginRequest.Email}
+
+		var user struct {
+			ID             string `bson:"_id"`
+			HashedPassword string `bson:"hashed_password"`
+		}
+
+		if err := database.DB.Collection("users").FindOne(context.Background(), filter).Decode(&user); err != nil {
+			w.WriteHeader(http.StatusNotFound)
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"status_code": http.StatusNotFound,
+				"error":       "User not found",
+				"body":        nil,
+			})
+			return
+		}
+
+		if err := bcrypt.CompareHashAndPassword([]byte(user.HashedPassword), []byte(loginRequest.HashedPassword)); err != nil {
+			w.WriteHeader(http.StatusUnauthorized)
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"status_code": http.StatusUnauthorized,
+				"error":       "Invalid credentials",
+				"body":        nil,
+			})
+			return
+		}
+
+		http.SetCookie(w, &http.Cookie{
+			Name:     "auth",
+			Path:     "/",
+			Value:    user.ID,
+			Expires:  time.Now().Add(24 * time.Hour),
+			HttpOnly: true,
+			Secure:   false,
+		})
+
+		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(map[string]interface{}{
-			"status_code": http.StatusBadRequest,
-			"error":       err.Error(),
+			"status_code": http.StatusOK,
+			"message":     "Login successful",
+			"body":        nil,
+		})
+	} else {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"status_code": http.StatusMethodNotAllowed,
+			"error":       "method not allowed",
 			"body":        nil,
 		})
 		return
 	}
-
-	var filter = bson.M{
-		"email": loginRequest.Email,
-	}
-
-	var result struct {
-		_id             string `bson:"_id"`
-		hashed_password string `bson:"hashed_password"`
-	}
-
-	if err := database.DB.Collection("users").FindOne(context.Background(), filter).Decode(&result); err != nil {
-		w.WriteHeader(http.StatusNotFound)
-		json.NewEncoder(w).Encode(map[string]interface{}{
-			"status_code": http.StatusNotFound,
-			"error":       "user not found",
-			"body":        nil,
-		})
-		return
-	}
-
-	if err := bcrypt.CompareHashAndPassword([]byte(result.hashed_password), []byte(loginRequest.Password)); err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		json.NewEncoder(w).Encode(map[string]interface{}{
-			"status_code": http.StatusUnauthorized,
-			"error":       "invalid credentials",
-			"body":        nil,
-		})
-		return
-	}
-
-	http.SetCookie(w, &http.Cookie{
-		Name:     "auth",
-		Path:     "/",
-		Value:    result._id,
-		Expires:  time.Now().Add(24 * time.Hour),
-		HttpOnly: true,
-		Secure:   false,
-	})
-
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]interface{}{
-		"status_code": http.StatusOK,
-		"message":     "login successful",
-		"body":        nil,
-	})
 }

@@ -2,3 +2,4 @@
 * Add auto_renew button on payment
 * Add suscription days on plan page
 * Add true to secure field on all cookies when going to production
+* Add READMES to everything
