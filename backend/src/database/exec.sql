@@ -5,16 +5,16 @@
 SET @DEFAULT_VIDEO = "/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/default_video.mp4";
 
 --- *************** VARIABLES TO NOT CHANGE (JUST CHANGE THE DIR "/home/.../github.com/fernandovmedina") ***************
-SET @DEFAULT_ONE   = "/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/default_one.webp";
-SET @DEFAULT_TWO   = "/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/default_two.webp";
-SET @DEFAULT_THREE = "/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/default_three.webp";
-SET @DEFAULT_FOUR  = "/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/default_four.webp";
-SET @DEFAULT_FIVE  = "/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/default_five.webp";
-SET @DEFAULT_SIX   = "/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/default_six.webp";
-SET @DEFAULT_SEVEN = "/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/default_seven.webp";
-SET @DEFAULT_EIGHT = "/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/default_eight.webp";
-SET @DEFAULT_NINE  = "/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/default_nine.webp";
-SET @DEFAULT_TEN   = "/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/default_ten.webp";
+SET @DEFAULT_ONE   = "/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/default_one.png";
+SET @DEFAULT_TWO   = "/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/default_two.png";
+SET @DEFAULT_THREE = "/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/default_three.png";
+SET @DEFAULT_FOUR  = "/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/default_four.png";
+SET @DEFAULT_FIVE  = "/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/default_five.png";
+SET @DEFAULT_SIX   = "/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/default_six.png";
+SET @DEFAULT_SEVEN = "/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/default_seven.png";
+SET @DEFAULT_EIGHT = "/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/default_eight.png";
+SET @DEFAULT_NINE  = "/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/default_nine.png";
+SET @DEFAULT_TEN   = "/home/fernandovmedina/workspace/go/src/github.com/fernandovmedina/netflix-clone-react/backend/public/default_ten.png";
 
 --- *************** INSERTS ***************
 
